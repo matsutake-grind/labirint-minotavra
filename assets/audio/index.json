@@ -1,0 +1,203 @@
+{
+ "источник": "pipeline/audio/plan.json → gen.js (ElevenLabs, офлайн) → master.js",
+ "треки": {
+  "hub-explore": {
+   "вид": "music",
+   "зона": "HUB",
+   "слой": "explore",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/hub-explore.webm",
+    "aac": "assets/audio/hub-explore.m4a"
+   },
+   "петля": [
+    0,
+    86.667
+   ],
+   "громкость": 0,
+   "сек": 86.67,
+   "sha": "5988b8e4d969a636"
+  },
+  "grove-explore": {
+   "вид": "music",
+   "зона": "GROVE",
+   "слой": "explore",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/grove-explore.webm",
+    "aac": "assets/audio/grove-explore.m4a"
+   },
+   "петля": [
+    0,
+    80
+   ],
+   "громкость": 0,
+   "сек": 80,
+   "sha": "071101ff68667c0e"
+  },
+  "grove-combat": {
+   "вид": "music",
+   "зона": "GROVE",
+   "слой": "combat",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/grove-combat.webm",
+    "aac": "assets/audio/grove-combat.m4a"
+   },
+   "петля": [
+    0,
+    80
+   ],
+   "громкость": 0,
+   "сек": 80,
+   "sha": "922f671822d6b5d5"
+  },
+  "temple-explore": {
+   "вид": "music",
+   "зона": "TEMPLE",
+   "слой": "explore",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/temple-explore.webm",
+    "aac": "assets/audio/temple-explore.m4a"
+   },
+   "петля": [
+    0,
+    89.143
+   ],
+   "громкость": 0,
+   "сек": 89.14,
+   "sha": "55d9be81a497b662"
+  },
+  "temple-combat": {
+   "вид": "music",
+   "зона": "TEMPLE",
+   "слой": "combat",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/temple-combat.webm",
+    "aac": "assets/audio/temple-combat.m4a"
+   },
+   "петля": [
+    0,
+    89.143
+   ],
+   "громкость": 0,
+   "сек": 89.14,
+   "sha": "e5ebb755b80256fa"
+  },
+  "gallery-explore": {
+   "вид": "music",
+   "зона": "GALLERY",
+   "слой": "explore",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/gallery-explore.webm",
+    "aac": "assets/audio/gallery-explore.m4a"
+   },
+   "петля": [
+    0,
+    80
+   ],
+   "громкость": 0,
+   "сек": 80,
+   "sha": "72116a145d0cbdb3"
+  },
+  "gallery-combat": {
+   "вид": "music",
+   "зона": "GALLERY",
+   "слой": "combat",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/gallery-combat.webm",
+    "aac": "assets/audio/gallery-combat.m4a"
+   },
+   "петля": [
+    0,
+    80
+   ],
+   "громкость": 0,
+   "сек": 80,
+   "sha": "01c73f75ea0f6aae"
+  },
+  "hall-explore": {
+   "вид": "music",
+   "зона": "HALL",
+   "слой": "explore",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/hall-explore.webm",
+    "aac": "assets/audio/hall-explore.m4a"
+   },
+   "петля": [
+    0,
+    88
+   ],
+   "громкость": 0,
+   "сек": 88,
+   "sha": "eb99170a77ce8b79"
+  },
+  "hall-combat": {
+   "вид": "music",
+   "зона": "HALL",
+   "слой": "combat",
+   "хозяин": null,
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/hall-combat.webm",
+    "aac": "assets/audio/hall-combat.m4a"
+   },
+   "петля": [
+    0,
+    88
+   ],
+   "громкость": 0,
+   "сек": 88,
+   "sha": "3a6c79f8456ed72e"
+  },
+  "boss-polyphemus": {
+   "вид": "music",
+   "зона": "BOSS",
+   "слой": "combat",
+   "хозяин": "POLYPHEMUS",
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/boss-polyphemus.webm",
+    "aac": "assets/audio/boss-polyphemus.m4a"
+   },
+   "петля": [
+    0,
+    87.273
+   ],
+   "громкость": 0,
+   "сек": 87.27,
+   "sha": "8bf8d2c1bf940bad"
+  },
+  "boss-minotaur": {
+   "вид": "music",
+   "зона": "BOSS",
+   "слой": "combat",
+   "хозяин": "MINOTAUR",
+   "группа": null,
+   "файлы": {
+    "opus": "assets/audio/boss-minotaur.webm",
+    "aac": "assets/audio/boss-minotaur.m4a"
+   },
+   "петля": [
+    0,
+    80.769
+   ],
+   "громкость": 0,
+   "сек": 80.77,
+   "sha": "1a0e6825769720dd"
+  }
+ }
+}

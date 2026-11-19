@@ -1,0 +1,170 @@
+/* Оболочка слоя рендера (M1): оверлеи смерти и алтаря. Токены — те же, что у HUD (r3/hud.css).
+   Только transform и opacity в анимации, не дольше 400 мс (инвариант 5). */
+.ovl { position: fixed; inset: 0; display: none; place-items: center; background: rgba(8, 5, 3, .62); z-index: 20; }
+.ovl.on { display: grid; }
+.ovl .col { display: flex; flex-direction: column; align-items: center; gap: 14px; min-width: min(260px, 92vw); max-width: min(86vw, 420px);
+  /* border-box и потолок по ширине окна: на 320 px столбец с полями 30 px вылезал за экран (P8) */
+  box-sizing: border-box; padding: 26px 30px; border-radius: 10px; background: var(--glaze-2); border: 1px solid var(--line);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .6);
+  transform: translateY(6px); opacity: 0; transition: transform .24s ease-out, opacity .24s ease-out; }
+.ovl.on .col { transform: none; opacity: 1; }
+.ovl h2 { margin: 0; font-family: 'Philosopher', 'PT Sans', sans-serif; font-weight: 700; font-size: 24px; color: var(--slip); text-align: center; }
+.ovl p { margin: 0; max-width: 40ch; text-align: center; font-size: 14px; line-height: 1.45; color: var(--pale); opacity: .88; }
+.ovl .coins { font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 20px; color: var(--bronze-hi); }
+/* ---- Кнопки К1 «Нить и глина»: четыре класса, плоские тона, без градиентов ----
+   .k-main  — главная (одна на экран): глина, тёмный лак текстом, процарапанная линия внутри
+   .k-2     — вторая: лак, рамка глиной, текст --slip (по умолчанию у любого .btn)
+   .k-price — цена: как вторая + монета слева, цифры tabular-nums
+   .k-ad    — реклама: лак, ▶ в глиняном круге, строка «Смотреть рекламу» и строка награды
+   Состояния — по контрасту текста ≥ 4.5:1 (стенд r3/buttons-probe.js). Движение — только transform. */
+.btn { position: relative; min-width: 200px; min-height: 48px; padding: 10px 22px; border-radius: 6px; cursor: pointer;
+  font-family: 'PT Sans', system-ui, sans-serif; font-weight: 700; font-size: 16px; letter-spacing: .02em;
+  color: var(--slip); background: var(--glaze); border: 1px solid var(--clay); box-shadow: none;
+  transition: transform .1s ease-out; }
+.btn:not(:disabled):hover { background: var(--glaze-2); border-color: var(--clay-light); }
+.btn:not(:disabled):active { transform: translateY(1px); background: #0D0A07; }
+.btn:focus-visible { outline: 2px solid var(--slip); outline-offset: 2px; }
+.btn.k-main { --k: var(--clay); color: var(--glaze); background: var(--k); border-color: var(--k);
+  box-shadow: inset 0 0 0 3px var(--k), inset 0 0 0 4px rgba(239, 227, 203, .35); }
+.btn.k-main:not(:disabled):hover { --k: var(--clay-hover); color: var(--glaze); background: var(--k); border-color: var(--k); }
+.btn.k-main:not(:disabled):active { --k: var(--clay-press); color: var(--glaze); background: var(--k); border-color: var(--k); }
+.btn.k-price { display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-variant-numeric: tabular-nums; }
+.btn.k-price::before { content: ''; flex: none; width: 14px; height: 14px; border-radius: 50%; background: var(--bronze-hi);
+  box-shadow: inset 0 0 0 3px var(--bronze-hi), inset 0 0 0 4px rgba(22, 17, 13, .55); }
+.btn.k-ad { display: grid; grid-template-columns: 28px auto; column-gap: 12px; align-items: center; justify-content: center; text-align: left;
+  padding: 8px 20px 8px 14px; border-color: var(--line); font-size: 15px; }
+.btn.k-ad::before { content: ''; grid-column: 1; grid-row: 1 / span 2; width: 28px; height: 28px; border-radius: 50%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Cpath fill='%2316110D' d='M11 8.5v11l9-5.5z'/%3E%3C/svg%3E") center / 28px 28px no-repeat, var(--clay); }
+.btn.k-ad > span { grid-column: 2; }
+/* В1: сборка без рекламы (VK Play) — кнопок за ролик нет вовсе; оболочка ставит класс до первого показа */
+body.no-ads .btn.k-ad { display: none !important; }
+.btn.k-ad .rv2 { font-size: 12px; font-weight: 400; color: var(--slip-dim); }
+.btn:disabled, .btn.k-main:disabled, .btn.k-price:disabled, .btn.k-ad:disabled { color: var(--off); background: var(--glaze-2); border-color: var(--line);
+  box-shadow: none; cursor: default; }
+.btn.k-price:disabled::before { background: #6B5E43; box-shadow: inset 0 0 0 3px #6B5E43, inset 0 0 0 4px rgba(22, 17, 13, .55); }
+.btn.k-ad:disabled::before { background-color: #4F4234; }
+.btn.k-ad:disabled .rv2 { color: var(--off); }
+/* Слева сверху, а не по центру: центр верха занимает боссбар (библия §8.2), и в TEMPLE подпись
+   легла прямо на него. */
+#zone-name { position: fixed; left: 70px; top: 22px; font-family: 'Philosopher', 'PT Sans', sans-serif;
+  font-size: 16px; color: var(--pale); text-shadow: 0 1px 3px #000; opacity: .9; pointer-events: none; }
+#toast { position: fixed; left: 50%; bottom: 120px; transform: translate(-50%, 8px); opacity: 0; padding: 8px 16px; border-radius: 6px;
+  background: rgba(10, 7, 5, .82); border: 1px solid var(--bronze-lo); color: var(--pale); font-size: 14px; pointer-events: none;
+  transition: transform .2s ease-out, opacity .2s ease-out; }
+#toast.on { transform: translate(-50%, 0); opacity: 1; }
+
+/* ---- Кносс: экран поверх сцены; прокрутка только внутри тела, страница не скроллится ---- */
+#hub { position: fixed; inset: 0; display: none; flex-direction: column; background: var(--glaze-2); z-index: 10;
+  padding-right: calc(var(--safe-r)); }
+#hub.on { display: flex; }
+.hub-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px 6px; }
+.hub-head h1 { margin: 0; font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 24px; color: var(--slip); }
+.hub-head .drx { font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 20px; color: var(--bronze-hi); }
+.hub-tabs { display: flex; gap: 8px; padding: 6px 16px; flex-wrap: wrap; }
+.hub-tabs .btn { flex: 1; min-width: 120px; }
+.hub-subtabs { display: flex; gap: 6px; flex-wrap: wrap; }
+/* Зона касания не меньше 48 px и в узком портрете: при min-width 0 четыре подвкладки на 320 px
+   сжимались до 43 px (P8); теперь они переносятся на вторую строку, а не мельчают. */
+.hub-subtabs .btn { min-width: 48px; flex: 1; padding: 8px 10px; font-size: 14px; }
+.hub-subtabs .btn.sel { background: var(--glaze-2); border-color: var(--clay-light); }
+.hub-body { flex: 1; overflow-y: auto; padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 10px; max-width: 860px; width: 100%;
+  box-sizing: border-box; margin: 0 auto; }
+.hub-body .stats { color: var(--pale); font-size: 15px; line-height: 1.55; }
+.hub-body .note { margin: 0; color: var(--pale); opacity: .8; font-size: 13px; line-height: 1.4; }
+.hub-body h3 { margin: 10px 0 0; font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 18px; color: var(--slip); }
+.hub-body .big { min-height: 56px; font-size: 18px; }
+.card { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 10px 14px; border-radius: 8px;
+  background: var(--glaze-2); border: 1px solid var(--line); border-left: 6px solid var(--pc, var(--bronze-lo)); }
+.card .nm { grid-column: 1; font-weight: 700; font-size: 16px; color: var(--pale); }
+.card .st { grid-column: 1; font-size: 13px; color: var(--pale); opacity: .8; line-height: 1.4; }
+.card .acts { grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; gap: 6px; justify-content: center; }
+.card .acts .btn { min-width: 128px; min-height: 48px; padding: 6px 12px; font-size: 14px; }
+/* Иконка предмета (A9): файл 128², показывается вдвое меньше — запас на плотный экран.
+   Колонка иконки отдельная, чтобы имя и статы не съезжали от разной ширины рисунка. */
+.card.item { grid-template-columns: auto 1fr auto; }
+.card.item .ico { grid-column: 1; grid-row: 1 / span 2; width: clamp(48px, 13vw, 64px); height: auto;
+  align-self: center; border-radius: 8px; user-select: none; -webkit-user-drag: none; }
+.card.item .nm, .card.item .st { grid-column: 2; min-width: 0; overflow-wrap: anywhere; }
+.card.item .acts { grid-column: 3; }
+.reveal .ico.big { width: 96px; height: 96px; }
+/* Строка сравнения с надетым (A11). У карточки вещи стало три ряда — кнопки тянутся на все.
+   Тона «лучше/хуже» живут здесь, а не в CONFIG: в CONFIG числа баланса, а это решение показа,
+   и ключа под него в ядре нет. Знак читается видом — рамкой, тоном и положением стрелки, —
+   а не словами «вверх» и «вниз». */
+/* Колонка кнопок у вещи высокая — четыре действия, — и, растягиваясь на все ряды, она
+   раздвигала имя и статы к краям карточки. Третий ряд сделан гибким: лишнюю высоту забирает он,
+   а имя, статы и сравнение остаются прижатыми друг к другу. */
+.card.item { grid-template-rows: auto auto 1fr; }
+.card.item .acts { grid-row: 1 / -1; align-self: stretch; }
+.card.item > .ico { align-self: start; }
+.card.item .st.cmp { align-self: start; }
+.card .st.cmp { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; opacity: 1; }
+.card .st.cmp b { font-weight: 700; color: var(--bronze-hi); opacity: .9; }
+.card .st.cmp .none { opacity: .7; }
+.card .st.cmp .d { display: inline-flex; align-items: baseline; gap: 4px; padding: 1px 7px 2px; border-radius: 10px;
+  font-size: 12px; line-height: 1.5; border: 1px solid currentColor; }
+.card .st.cmp .d .lbl { font-style: normal; opacity: .85; }
+.card .st.cmp .d .v { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.card .st.cmp .sg { font-style: normal; font-size: 11px; line-height: 1; align-self: center; font-weight: 700; }   /* И3: ▲ лучше / ▼ хуже / = без перемен */
+.card .st.cmp .sg.eq { font-size: 13px; opacity: .85; margin-right: 2px; }
+.card .st.cmp .d.bad { border-style: dashed; }   /* контур: хуже — пунктир, лучше — сплошной: второй канал без цвета */
+.card .st.cmp .d.good { color: #8FD14F; background: rgba(143, 209, 79, .10); }
+.card .st.cmp .d.bad { color: #E0603F; background: rgba(224, 96, 63, .10); }
+.card.equipped { --pc: var(--bronze-hi); }
+.card.zone.done { --pc: var(--bronze-hi); }
+.card.zone.locked { opacity: .6; }
+.card.sel { box-shadow: 0 0 0 2px var(--pc, var(--bronze-hi)) inset; }
+.card.quest .acts { grid-row: 1 / span 3; }
+.card.quest.main { --pc: var(--bronze-hi); }
+.card.quest .who { font-weight: 400; opacity: .75; font-size: 14px; }
+.card.quest .say { font-style: italic; opacity: .9; }
+.group { padding: 10px 4px 2px; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--bronze-hi); opacity: .85; }
+.hub-tabs .btn { position: relative; }
+.hub-tabs .btn[data-badge]:not([data-badge=""])::after { content: attr(data-badge); position: absolute; top: -6px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 10px;
+  background: var(--clay); color: var(--glaze); font-weight: 700; font-size: 12px; line-height: 20px; text-align: center; box-shadow: 0 1px 3px rgba(0, 0, 0, .5); }
+.card.locked { opacity: .55; }
+.card .dots i { display: inline-block; width: 8px; height: 8px; margin-left: 3px; border-radius: 50%; border: 1px solid var(--bronze-lo); vertical-align: middle; }
+.card .dots i.on { background: var(--pc, var(--bronze-hi)); border-color: var(--pc, var(--bronze-hi)); }
+.attrs { display: flex; gap: 8px; flex-wrap: wrap; }
+.attrs .card { flex: 1; min-width: 180px; }
+.bar { display: flex; gap: 8px; }
+.bar .slot { flex: 1; min-width: 0; min-height: 56px; border-color: var(--gc, var(--bronze-lo)); font-size: 14px;
+  position: relative; display: flex; align-items: center; justify-content: center; padding: 4px; }
+/* Ячейка Гимнасия повторяет ячейку боя (A10): знак крупно, цифра слота в углу мелко. */
+.bar .slot .ico { width: 48px; height: 48px; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.bar .slot .key { position: absolute; left: 6px; top: 3px; font-size: 13px; color: var(--bronze-hi); opacity: .85; }
+.bar .slot.empty .key { position: static; font-size: 20px; opacity: .6; }
+.bar .slot.target { box-shadow: 0 0 0 2px var(--bronze-hi) inset; }
+/* Дары и Трофеи (P2). Контейнер вкладки — прямой ребёнок тела: строка дара на карточке школы
+   тоже носит класс gift, и без «>» правило вкладки ставило её в столбец по центру (И1). */
+.hub-body > .gift { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0 16px; }
+.hub-body > .gift .pity { font-size: 13px; color: var(--pale); opacity: .85; text-align: center; max-width: 60ch; }
+.hub-body > .gift .btn.big { min-width: 240px; font-size: 18px; }
+.reveal { width: min(100%, 520px); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px; border-radius: 10px; background: rgba(0, 0, 0, .28); }
+.reveal .nm { font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 22px; }
+.reveal .st { font-size: 13px; color: var(--pale); opacity: .85; }
+.reveal .st.shard { color: var(--bronze-hi); opacity: 1; }
+.reveal .card { width: 100%; }
+.trophy-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.trophy { padding: 10px 12px; border-radius: 8px; background: rgba(0, 0, 0, .22); border: 1px solid rgba(255, 255, 255, .06); }
+.trophy .nm { font-weight: 700; font-size: 15px; color: var(--pale); }
+.trophy .st { font-size: 13px; color: var(--pale); opacity: .8; line-height: 1.4; }
+.trophy.locked { opacity: .5; }
+.trophy .res.weak { color: #E9B44C; opacity: 1; }
+.trophy .res.hard { color: #9FB3C8; opacity: 1; }
+/* Гимнасий (P3): выучка и дар на карточке мастерства */
+/* Знак приёма и знак мастерства на карточке (A10): своя колонка, как у иконки вещи. */
+.card.sk, .card.mastery { grid-template-columns: auto 1fr auto; }
+.card.sk > .ico, .card.mastery > .ico { grid-column: 1; grid-row: 1 / span 2; width: clamp(40px, 11vw, 56px); height: auto;
+  align-self: center; user-select: none; -webkit-user-drag: none; }
+.card.sk .nm, .card.sk .st, .card.mastery .nm, .card.mastery .st { grid-column: 2; min-width: 0; overflow-wrap: anywhere; }
+.card.sk .acts, .card.mastery .acts { grid-column: 3; }
+.card.mastery > .ico { grid-row: 1 / span 3; }
+.card.mastery .st.gift { opacity: .95; }
+.card.mastery .st.gift b { color: var(--pc, var(--bronze-hi)); }
+.card.mastery .acts .btn { min-width: 150px; }
+
+/* Выключатель звука (P5): значок без подписи, зона касания 48 */
+.btn.sq { min-width: 48px; width: 48px; height: 48px; min-height: 48px; padding: 0; display: grid; place-items: center; }
+.btn.sq svg { width: 24px; height: 24px; }
+#ovl-pause .btn.sq { margin-top: 2px; }

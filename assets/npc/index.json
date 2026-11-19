@@ -1,0 +1,54 @@
+{
+ "источник": "pipeline/portraits.html",
+ "размер": [
+  256,
+  512
+ ],
+ "ключи": [
+  "keeper",
+  "architect",
+  "shepherd",
+  "smith",
+  "charon"
+ ],
+ "КБ": {
+  "keeper": 14.46,
+  "architect": 12.66,
+  "shepherd": 9.85,
+  "smith": 12.1,
+  "charon": 11.07
+ },
+ "sha": {
+  "keeper": "970a46b27bb63dee",
+  "architect": "fcaa94df452e77f6",
+  "shepherd": "4cf4c610433fca73",
+  "smith": "e3ead61b073e2aff",
+  "charon": "346e7fc06bfee416"
+ },
+ "пятна": {
+  "keeper": [
+   [
+    "thread",
+    154,
+    241
+   ]
+  ],
+  "architect": [],
+  "shepherd": [],
+  "smith": [],
+  "charon": [
+   [
+    "lantern",
+    158,
+    353
+   ]
+  ]
+ },
+ "рост": {
+  "keeper": 1.695,
+  "architect": 1.896,
+  "shepherd": 1.924,
+  "smith": 1.734,
+  "charon": 2.413
+ }
+}

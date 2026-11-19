@@ -1,0 +1,639 @@
+{
+ "источник": "pipeline/skills.html",
+ "сторона": 96,
+ "ключи": [
+  "CLEAVE",
+  "CHARGE",
+  "QUAKE",
+  "BLOODRAGE",
+  "BRAWN",
+  "FRENZY",
+  "BLOODLUST",
+  "SLAUGHTER",
+  "BASH",
+  "JAVELIN",
+  "SHIELDWALL",
+  "AEGIS",
+  "STOUT",
+  "TEMPER",
+  "RIPOSTE",
+  "WISDOM",
+  "SWIFTSTEP",
+  "WINDCUT",
+  "CADUCEUS",
+  "HASTE",
+  "FLEET",
+  "EVASION",
+  "TAILWIND",
+  "MERCURY",
+  "SUNSHOT",
+  "VOLLEY",
+  "SUNBURST",
+  "FOCUS",
+  "MARKSMAN",
+  "RADIANCE",
+  "STEADYHAND",
+  "DAYBREAK",
+  "SPARK",
+  "THUNDERCLAP",
+  "BOLTFALL",
+  "STORMCALL",
+  "CHARGEUP",
+  "CONDUCT",
+  "GROUNDED",
+  "TEMPEST",
+  "REAP",
+  "SHADESTEP",
+  "GRAVE",
+  "SOULBIND",
+  "LEECH",
+  "GRIM",
+  "SHROUD",
+  "UNDYING",
+  "M_FURY",
+  "M_GUARD",
+  "M_WIND",
+  "M_HUNT",
+  "M_STORM",
+  "M_GLOOM"
+ ],
+ "КБ": {
+  "CLEAVE": 3.43,
+  "CHARGE": 3.4,
+  "QUAKE": 3.49,
+  "BLOODRAGE": 3.68,
+  "BRAWN": 2.3,
+  "FRENZY": 2.41,
+  "BLOODLUST": 2.53,
+  "SLAUGHTER": 2.71,
+  "BASH": 3.53,
+  "JAVELIN": 3.59,
+  "SHIELDWALL": 3.58,
+  "AEGIS": 3.77,
+  "STOUT": 2.43,
+  "TEMPER": 2.44,
+  "RIPOSTE": 2.74,
+  "WISDOM": 2.55,
+  "SWIFTSTEP": 3.56,
+  "WINDCUT": 3.6,
+  "CADUCEUS": 3.64,
+  "HASTE": 3.83,
+  "FLEET": 2.5,
+  "EVASION": 2.64,
+  "TAILWIND": 2.68,
+  "MERCURY": 2.64,
+  "SUNSHOT": 3.65,
+  "VOLLEY": 3.66,
+  "SUNBURST": 3.71,
+  "FOCUS": 3.87,
+  "MARKSMAN": 2.5,
+  "RADIANCE": 2.89,
+  "STEADYHAND": 2.76,
+  "DAYBREAK": 2.46,
+  "SPARK": 3.52,
+  "THUNDERCLAP": 3.53,
+  "BOLTFALL": 3.52,
+  "STORMCALL": 3.72,
+  "CHARGEUP": 2.56,
+  "CONDUCT": 2.31,
+  "GROUNDED": 2.87,
+  "TEMPEST": 2.74,
+  "REAP": 3.27,
+  "SHADESTEP": 3.28,
+  "GRAVE": 3.33,
+  "SOULBIND": 3.51,
+  "LEECH": 2.3,
+  "GRIM": 2.36,
+  "SHROUD": 2.37,
+  "UNDYING": 2.54,
+  "M_FURY": 2.97,
+  "M_GUARD": 3.27,
+  "M_WIND": 3.48,
+  "M_HUNT": 3.48,
+  "M_STORM": 3.07,
+  "M_GLOOM": 2.88
+ },
+ "sha": {
+  "CLEAVE": "cf5868b75f37f65c",
+  "CHARGE": "44af402f59cee715",
+  "QUAKE": "551cc2c24aa05947",
+  "BLOODRAGE": "e3801f1ef35fa1af",
+  "BRAWN": "47d5d16c8e539da9",
+  "FRENZY": "5c7d85922c2b6261",
+  "BLOODLUST": "77cbf62de01285b1",
+  "SLAUGHTER": "da6f2fc2eb461004",
+  "BASH": "0585c6084d91eb29",
+  "JAVELIN": "755ddbb8a5c85547",
+  "SHIELDWALL": "781cd4c6c73d9c90",
+  "AEGIS": "f4ab8f6fdf5ddfc6",
+  "STOUT": "d9d47a0d945d601f",
+  "TEMPER": "b73a6cbd7431d158",
+  "RIPOSTE": "6ad090c0e40ba0ad",
+  "WISDOM": "dd98a422d7883571",
+  "SWIFTSTEP": "4071716f4b91edb6",
+  "WINDCUT": "c643f999ddc6ce7c",
+  "CADUCEUS": "0f92705827887db4",
+  "HASTE": "035671d0b22aae24",
+  "FLEET": "ded07c02d526e9bc",
+  "EVASION": "4a068757ca75483e",
+  "TAILWIND": "2981076bfee8867c",
+  "MERCURY": "ab1c388601114d95",
+  "SUNSHOT": "d4a6c838ea800737",
+  "VOLLEY": "7881c60f71f23f23",
+  "SUNBURST": "f2d243ff1e4ea8cc",
+  "FOCUS": "48b11f1cd945ede0",
+  "MARKSMAN": "a35c2180435a2802",
+  "RADIANCE": "1a03ae56f3ffea96",
+  "STEADYHAND": "6c13b962f9b088c7",
+  "DAYBREAK": "411dfcdf1b1caafa",
+  "SPARK": "a41c9d4279d6a688",
+  "THUNDERCLAP": "a2be321c91e0e885",
+  "BOLTFALL": "53fea77890fdeb8c",
+  "STORMCALL": "a75c6dada10dc6fa",
+  "CHARGEUP": "b28c46eef6482b92",
+  "CONDUCT": "881b6eb3f598b12c",
+  "GROUNDED": "10c1fe6c6187cf93",
+  "TEMPEST": "02ec246d7ad344b6",
+  "REAP": "f918cb8b6067bd00",
+  "SHADESTEP": "b10ab94676eea7aa",
+  "GRAVE": "9d1c83cef3a0dd95",
+  "SOULBIND": "24bad65abb2a08c4",
+  "LEECH": "f4b3099149cbfe21",
+  "GRIM": "38c641e4207e75ce",
+  "SHROUD": "8d3b5ea5dadd162b",
+  "UNDYING": "32aa283f84d9d005",
+  "M_FURY": "ddf1612e11e3a4e3",
+  "M_GUARD": "529375235de773ee",
+  "M_WIND": "a14c46c84fd180da",
+  "M_HUNT": "931647f4dcdd3dc3",
+  "M_STORM": "eb569860e27ce0e3",
+  "M_GLOOM": "586f4175a94015a5"
+ },
+ "мета": {
+  "CLEAVE": {
+   "вид": "active",
+   "школа": "M_FURY",
+   "tier": 1,
+   "форма": "arc",
+   "штрих": "#EFE3CB",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "CHARGE": {
+   "вид": "active",
+   "школа": "M_FURY",
+   "tier": 2,
+   "форма": "dash",
+   "штрих": "#EFE3CB",
+   "высота": 62.3,
+   "щит": 537,
+   "дори": 59.2
+  },
+  "QUAKE": {
+   "вид": "active",
+   "школа": "M_FURY",
+   "tier": 3,
+   "форма": "circle",
+   "штрих": "#EFE3CB",
+   "высота": 75,
+   "щит": 462,
+   "дори": 25.8
+  },
+  "BLOODRAGE": {
+   "вид": "active",
+   "школа": "M_FURY",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "BRAWN": {
+   "вид": "passive",
+   "школа": "M_FURY",
+   "tier": 1,
+   "поля": [
+    "atkMult"
+   ]
+  },
+  "FRENZY": {
+   "вид": "passive",
+   "школа": "M_FURY",
+   "tier": 2,
+   "поля": [
+    "msMult"
+   ]
+  },
+  "BLOODLUST": {
+   "вид": "passive",
+   "школа": "M_FURY",
+   "tier": 3,
+   "поля": [
+    "lifesteal"
+   ]
+  },
+  "SLAUGHTER": {
+   "вид": "passive",
+   "школа": "M_FURY",
+   "tier": 4,
+   "поля": [
+    "crit",
+    "critMult"
+   ]
+  },
+  "BASH": {
+   "вид": "active",
+   "школа": "M_GUARD",
+   "tier": 1,
+   "форма": "arc",
+   "штрих": "#EFE3CB",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "JAVELIN": {
+   "вид": "active",
+   "школа": "M_GUARD",
+   "tier": 2,
+   "форма": "proj",
+   "штрих": "#EFE3CB",
+   "высота": 65.3,
+   "щит": 651,
+   "дори": 67.3
+  },
+  "SHIELDWALL": {
+   "вид": "active",
+   "школа": "M_GUARD",
+   "tier": 3,
+   "форма": "circle",
+   "штрих": "#EFE3CB",
+   "высота": 75,
+   "щит": 462,
+   "дори": 25.8
+  },
+  "AEGIS": {
+   "вид": "active",
+   "школа": "M_GUARD",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "STOUT": {
+   "вид": "passive",
+   "школа": "M_GUARD",
+   "tier": 1,
+   "поля": [
+    "hpMult"
+   ]
+  },
+  "TEMPER": {
+   "вид": "passive",
+   "школа": "M_GUARD",
+   "tier": 2,
+   "поля": [
+    "def"
+   ]
+  },
+  "RIPOSTE": {
+   "вид": "passive",
+   "школа": "M_GUARD",
+   "tier": 3,
+   "поля": [
+    "thorns"
+   ]
+  },
+  "WISDOM": {
+   "вид": "passive",
+   "школа": "M_GUARD",
+   "tier": 4,
+   "поля": [
+    "enMax",
+    "enRegen"
+   ]
+  },
+  "SWIFTSTEP": {
+   "вид": "active",
+   "школа": "M_WIND",
+   "tier": 1,
+   "форма": "dash",
+   "штрих": "#EFE3CB",
+   "высота": 62.3,
+   "щит": 537,
+   "дори": 59.2
+  },
+  "WINDCUT": {
+   "вид": "active",
+   "школа": "M_WIND",
+   "tier": 2,
+   "форма": "arc",
+   "штрих": "#EFE3CB",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "CADUCEUS": {
+   "вид": "active",
+   "школа": "M_WIND",
+   "tier": 3,
+   "форма": "proj",
+   "штрих": "#EFE3CB",
+   "высота": 65.3,
+   "щит": 651,
+   "дори": 67.3
+  },
+  "HASTE": {
+   "вид": "active",
+   "школа": "M_WIND",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "FLEET": {
+   "вид": "passive",
+   "школа": "M_WIND",
+   "tier": 1,
+   "поля": [
+    "msMult"
+   ]
+  },
+  "EVASION": {
+   "вид": "passive",
+   "школа": "M_WIND",
+   "tier": 2,
+   "поля": [
+    "dodge"
+   ]
+  },
+  "TAILWIND": {
+   "вид": "passive",
+   "школа": "M_WIND",
+   "tier": 3,
+   "поля": [
+    "enRegen",
+    "enMax"
+   ]
+  },
+  "MERCURY": {
+   "вид": "passive",
+   "школа": "M_WIND",
+   "tier": 4,
+   "поля": [
+    "msMult",
+    "crit"
+   ]
+  },
+  "SUNSHOT": {
+   "вид": "active",
+   "школа": "M_HUNT",
+   "tier": 1,
+   "форма": "proj",
+   "штрих": "#FFB347",
+   "высота": 65.3,
+   "щит": 651,
+   "дори": 67.3
+  },
+  "VOLLEY": {
+   "вид": "active",
+   "школа": "M_HUNT",
+   "tier": 2,
+   "форма": "arc",
+   "штрих": "#FFB347",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "SUNBURST": {
+   "вид": "active",
+   "школа": "M_HUNT",
+   "tier": 3,
+   "форма": "circle",
+   "штрих": "#FFB347",
+   "высота": 75,
+   "щит": 462,
+   "дори": 25.8
+  },
+  "FOCUS": {
+   "вид": "active",
+   "школа": "M_HUNT",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "MARKSMAN": {
+   "вид": "passive",
+   "школа": "M_HUNT",
+   "tier": 1,
+   "поля": [
+    "crit"
+   ]
+  },
+  "RADIANCE": {
+   "вид": "passive",
+   "школа": "M_HUNT",
+   "tier": 2,
+   "поля": [
+    "res"
+   ]
+  },
+  "STEADYHAND": {
+   "вид": "passive",
+   "школа": "M_HUNT",
+   "tier": 3,
+   "поля": [
+    "critMult"
+   ]
+  },
+  "DAYBREAK": {
+   "вид": "passive",
+   "школа": "M_HUNT",
+   "tier": 4,
+   "поля": [
+    "atkMult",
+    "crit"
+   ]
+  },
+  "SPARK": {
+   "вид": "active",
+   "школа": "M_STORM",
+   "tier": 1,
+   "форма": "proj",
+   "штрих": "#FFB347",
+   "высота": 65.3,
+   "щит": 651,
+   "дори": 67.3
+  },
+  "THUNDERCLAP": {
+   "вид": "active",
+   "школа": "M_STORM",
+   "tier": 2,
+   "форма": "circle",
+   "штрих": "#FFB347",
+   "высота": 75,
+   "щит": 462,
+   "дори": 25.8
+  },
+  "BOLTFALL": {
+   "вид": "active",
+   "школа": "M_STORM",
+   "tier": 3,
+   "форма": "arc",
+   "штрих": "#FFB347",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "STORMCALL": {
+   "вид": "active",
+   "школа": "M_STORM",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "CHARGEUP": {
+   "вид": "passive",
+   "школа": "M_STORM",
+   "tier": 1,
+   "поля": [
+    "enMax",
+    "enRegen"
+   ]
+  },
+  "CONDUCT": {
+   "вид": "passive",
+   "школа": "M_STORM",
+   "tier": 2,
+   "поля": [
+    "atkMult"
+   ]
+  },
+  "GROUNDED": {
+   "вид": "passive",
+   "школа": "M_STORM",
+   "tier": 3,
+   "поля": [
+    "res",
+    "def"
+   ]
+  },
+  "TEMPEST": {
+   "вид": "passive",
+   "школа": "M_STORM",
+   "tier": 4,
+   "поля": [
+    "crit",
+    "critMult"
+   ]
+  },
+  "REAP": {
+   "вид": "active",
+   "школа": "M_GLOOM",
+   "tier": 1,
+   "форма": "arc",
+   "штрих": "#EFE3CB",
+   "высота": 64.8,
+   "щит": 565,
+   "дори": 62.6
+  },
+  "SHADESTEP": {
+   "вид": "active",
+   "школа": "M_GLOOM",
+   "tier": 2,
+   "форма": "dash",
+   "штрих": "#EFE3CB",
+   "высота": 62.3,
+   "щит": 537,
+   "дори": 59.2
+  },
+  "GRAVE": {
+   "вид": "active",
+   "школа": "M_GLOOM",
+   "tier": 3,
+   "форма": "circle",
+   "штрих": "#EFE3CB",
+   "высота": 75,
+   "щит": 462,
+   "дори": 25.8
+  },
+  "SOULBIND": {
+   "вид": "active",
+   "школа": "M_GLOOM",
+   "tier": 4,
+   "форма": "buff",
+   "штрих": "#EFE3CB",
+   "высота": 73.8,
+   "щит": 646,
+   "дори": 66.7
+  },
+  "LEECH": {
+   "вид": "passive",
+   "школа": "M_GLOOM",
+   "tier": 1,
+   "поля": [
+    "lifesteal"
+   ]
+  },
+  "GRIM": {
+   "вид": "passive",
+   "школа": "M_GLOOM",
+   "tier": 2,
+   "поля": [
+    "hpMult"
+   ]
+  },
+  "SHROUD": {
+   "вид": "passive",
+   "школа": "M_GLOOM",
+   "tier": 3,
+   "поля": [
+    "dodge"
+   ]
+  },
+  "UNDYING": {
+   "вид": "passive",
+   "школа": "M_GLOOM",
+   "tier": 4,
+   "поля": [
+    "lifesteal",
+    "thorns"
+   ]
+  },
+  "M_FURY": {
+   "вид": "school",
+   "школа": "M_FURY"
+  },
+  "M_GUARD": {
+   "вид": "school",
+   "школа": "M_GUARD"
+  },
+  "M_WIND": {
+   "вид": "school",
+   "школа": "M_WIND"
+  },
+  "M_HUNT": {
+   "вид": "school",
+   "школа": "M_HUNT"
+  },
+  "M_STORM": {
+   "вид": "school",
+   "школа": "M_STORM"
+  },
+  "M_GLOOM": {
+   "вид": "school",
+   "школа": "M_GLOOM"
+  }
+ }
+}

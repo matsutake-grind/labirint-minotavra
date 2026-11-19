@@ -1,0 +1,53 @@
+{
+ "_": "Реестр кита стен: слой (r3/world.js) берёт детали assets/kit/<зона>-<деталь>.glb; зона — ключ палитры (grove, temple, gallery, hall), деталь — straight, outer, inner, end, post; канон осей и стыков — шапка pipeline/kiln/lib/kit.py. Происхождение — по источникам; подробно — assets/CREDITS.md.",
+ "источники": {
+  "кузня": {
+   "откуда": "кузня Дедала: pipeline/kiln/recipes/kit-<зона>-<деталь>.py (lib/kit.py, lib/kit_zones.py), сборки — pipeline/kiln/built.json",
+   "лицензия": "собственный код проекта",
+   "ключи": [
+    "gallery-end",
+    "gallery-inner",
+    "gallery-outer",
+    "gallery-post",
+    "gallery-straight",
+    "grove-end",
+    "grove-inner",
+    "grove-outer",
+    "grove-post",
+    "grove-straight",
+    "hall-end",
+    "hall-inner",
+    "hall-outer",
+    "hall-post",
+    "hall-straight",
+    "temple-end",
+    "temple-inner",
+    "temple-outer",
+    "temple-post",
+    "temple-straight"
+   ]
+  }
+ },
+ "ключи": [
+  "gallery-end",
+  "gallery-inner",
+  "gallery-outer",
+  "gallery-post",
+  "gallery-straight",
+  "grove-end",
+  "grove-inner",
+  "grove-outer",
+  "grove-post",
+  "grove-straight",
+  "hall-end",
+  "hall-inner",
+  "hall-outer",
+  "hall-post",
+  "hall-straight",
+  "temple-end",
+  "temple-inner",
+  "temple-outer",
+  "temple-post",
+  "temple-straight"
+ ]
+}

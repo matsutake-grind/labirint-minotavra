@@ -1,0 +1,634 @@
+/* Набор облика интерфейса (серия И, срез И1; HOPLITE_DAEDALUS.md «И — ИНТЕРФЕЙС»).
+   Язык эталона Д1 в DOM: тёмная бронза и чернёное дерево, кант — бегущий меандр, акцент —
+   цвет школы. Файл общий для И1–И4: токены и классы здесь, раскладка экранов — у их срезов.
+   Орнамент — SVG в самом файле (инвариант 1: ничего извне); анимации — только transform и
+   opacity, не дольше 400 мс (инвариант 5); зоны касания ≥ 48 px (инвариант 6). Цвет школы
+   приходит из DATA.P[*].color двумя переменными: --pc (hex) и --pc-rgb («r, g, b») — rgba()
+   от второй работает и там, где нет color-mix(). */
+
+:root {
+  /* К1 «Нить и глина»: плоские тона вместо градиентов; источник правды токенов — этот файл */
+  --glaze: #16110D;        /* лак: панели, контуры, текст на глине */
+  --glaze-2: #221913;      /* поднятая панель */
+  --clay: #C8703F;         /* главная кнопка */
+  --clay-light: #E2C498;   /* светлая глина (радиальный фон иконок — позже; в К1 только токен) */
+  --slip: #EFE3CB;         /* текст, процарапанные линии */
+  --madder: #C81D5A;       /* ТОЛЬКО нить и пройденный путь (в К1 не применяется) */
+  --bronze-hi: #E3B45C;    /* ТОЛЬКО валюта и награды */
+  --line: rgba(239, 227, 203, .2);   /* разделитель: --slip 1 px при ~20 % */
+  --slip-dim: #C9BDA6;     /* вторая строка, подписи на глазури */
+  --off: #A39A88;          /* текст выключенной кнопки на --glaze-2 (6.6:1) */
+  --clay-hover: #D4804E; --clay-press: #BA693A;   /* тон наведения и нажатия главной (текст --glaze держит ≥ 4.5:1) */
+  --ui-wood: #1B130C; --ui-wood-2: #2A1E13; --ui-wood-3: #3A2A18;
+  --ui-line: rgba(227, 180, 92, .28); --ui-line-2: rgba(227, 180, 92, .14);
+  --ui-gold: #F0C87A; --ui-ochre: #B8862E; --ui-red: #8E2A1E;
+  /* К2 «Редкость по именам»: Глина, Бронза, Серебро, Пурпур, Золото гимнасия. Источник правды — CONFIG.RARITY_COLORS
+     (core/01-config.js); стенд r3/buttons-probe.js сверяет эти пять значений с CONFIG побайтно. */
+  --r0: #B85A33; --r1: #C08A2E; --r2: #C7CDD6; --r3: #B256A6; --r4: #F0CB55;
+  /* бегущий меандр: клетка 8 × 8, штрих в клетку — тот же рисунок, что кладёт кузня (lib/decor.py) */
+  --ui-meander: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath fill='%23B8862E' d='M0 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM6 4h1v1h-1zM0 5h1v1h-1zM2 5h5v1h-5zM0 6h1v1h-1zM0 7h8v1h-8z'/%3E%3C/svg%3E");
+}
+
+/* ---- Кносс: фон — чернёное дерево с тёплым светом сверху, не плоский градиент ---- */
+#hub { background: var(--glaze); }
+
+/* ---- диорама Кносса (Д7): двор под интерфейсом, два слоя и затемнение между ними ----
+   Только transform и opacity (инвариант 5): сдвиг слоёв — от --px, --py (r3/hub.js), проявление — opacity;
+   переходы ≤ 400 мс. Слои шире окна на 3 % с каждой стороны: сдвиг не открывает край картинки, и scale() не нужен.
+   Слои не интерактивные. Под prefers-reduced-motion переходов нет, слои стоят. */
+.hub-diorama { position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; --px: 0; --py: 0; }
+.hub-diorama .hub-layer { position: absolute; left: -3%; top: -3%; width: 106%; height: 106%; object-fit: cover; object-position: 50% 40%;
+  opacity: 0; transition: opacity .4s ease-out, transform .35s ease-out; will-change: transform; user-select: none; -webkit-user-drag: none; }
+.hub-diorama .hub-layer.on { opacity: 1; }
+.hub-diorama .hub-layer.back  { transform: translate3d(calc(var(--px) * -10px), calc(var(--py) * -6px), 0); }
+.hub-diorama .hub-layer.front { transform: translate3d(calc(var(--px) * -24px), calc(var(--py) * -14px), 0); }
+.hub-diorama .hub-scrim { position: absolute; inset: 0; background: rgba(14, 10, 6, .55); }
+#hub > .hub-head, #hub > .hub-tabs, #hub > .hub-body { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .hub-diorama .hub-layer { transition: none; transform: none !important; } }
+
+/* ---- портрет жителя в карточке задания (Д7): во весь рост первой колонкой, текст и кнопка — как были (карточка — сетка из app.css) ---- */
+.hub-body[data-screen="journal"] .card.quest[data-portrait] { grid-template-columns: 64px minmax(0, 1fr) auto; align-items: start; }
+.hub-body[data-screen="journal"] .card.quest[data-portrait] .nm, .hub-body[data-screen="journal"] .card.quest[data-portrait] .st { grid-column: 2; }
+.hub-body[data-screen="journal"] .card.quest[data-portrait] .acts { grid-column: 3; align-self: center; }
+.hub-body[data-screen="journal"] .card.quest .npc { grid-column: 1; grid-row: 1 / span 6; width: 64px; height: 128px; object-fit: cover; object-position: 50% 0;
+  border-radius: 4px; border: 1px solid var(--bronze-lo); background: #120C08; box-shadow: 0 1px 0 rgba(0, 0, 0, .5); }
+@media (max-width: 520px) {
+  .hub-body[data-screen="journal"] .card.quest[data-portrait] { grid-template-columns: 48px minmax(0, 1fr) auto; }
+  .hub-body[data-screen="journal"] .card.quest .npc { width: 48px; height: 96px; }
+}
+
+/* ---- шапка: имя города с меандром под ним, драхмы монетой, звук ---- */
+.hub-head { gap: 12px; padding: 12px 16px 8px; }
+.hub-head h1 { position: relative; padding-bottom: 8px; font-size: 26px; letter-spacing: .04em;
+  text-shadow: 0 1px 0 #000, 0 0 14px rgba(227, 180, 92, .25); }
+.hub-head h1::after { content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; min-width: 100px; height: 10px;
+  border-bottom: 1px solid var(--line); opacity: .9; }
+.hub-head .drx { display: inline-flex; align-items: center; gap: 8px; padding: 4px 14px 4px 6px; border-radius: 999px;
+  background: var(--glaze-2); border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 2px 6px rgba(0, 0, 0, .5); font-variant-numeric: tabular-nums; }
+.hub-head .drx svg { width: 28px; height: 28px; display: block; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .6)); }
+
+/* ---- вкладки: плашки тёмной бронзы со знаком; выбранная светится и держит острие вниз ---- */
+.hub-tabs { position: relative; gap: 6px; padding: 4px 16px 14px; }
+.hub-tabs::after { content: ''; position: absolute; left: 16px; right: 16px; bottom: 0; height: 10px;
+  border-bottom: 1px solid var(--line); opacity: .5; pointer-events: none; }
+/* вкладка — кнопка «вторая»: цвет и рамка у .btn (app.css), здесь только раскладка */
+.hub-tabs .btn { display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 96px; min-height: 50px;
+  padding: 6px 12px; font-size: 15px; letter-spacing: .02em; }
+.hub-head .hub-cur { display: none; }
+.hub-tabs .btn .tab-ico { width: 22px; height: 22px; flex: none; color: var(--clay-light); }
+.hub-tabs .btn.sel { background: var(--glaze-2); border-color: var(--clay-light); }
+.hub-tabs .btn.sel::before { content: ''; position: absolute; left: 50%; bottom: -8px; width: 10px; height: 10px;
+  transform: translateX(-50%) rotate(45deg); background: var(--glaze-2); border-right: 1px solid var(--clay-light); border-bottom: 1px solid var(--clay-light); }
+
+/* ---- тело: у Гимнасия шире — три карточки школ в ряд на десктопе ---- */
+.hub-body[data-screen="skills"] { max-width: 1180px; gap: 14px; }
+.hub-body .note#gym-note { padding: 10px 14px; position: relative; border-radius: 6px; font-size: 14px; opacity: 1;
+  background: rgba(239, 227, 203, .06); border: 1px solid var(--ui-line); }
+.hub-body .note#gym-note::before { content: ''; position: absolute; left: 12px; top: 50%; width: 16px; height: 16px; margin-top: -8px;
+  display: none; }
+
+/* ---- карточки школ ---- */
+.m-grid { flex: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(290px, 100%), 1fr)); gap: 14px; }
+.card.mastery { display: flex; flex-direction: column; align-items: stretch; gap: 6px; padding: 0 0 14px; overflow: hidden;
+  position: relative; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--glaze-2);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 6px 18px rgba(0, 0, 0, .45); }
+.card.mastery .m-band { height: 44px; flex: none;
+  background: rgba(var(--pc-rgb), .42);
+  border-bottom: 1px solid rgba(0, 0, 0, .6); }
+.m-medal { width: 76px; height: 76px; margin: -38px auto 2px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  background: var(--glaze);
+  border: 3px solid var(--bronze); box-shadow: 0 0 0 2px #0B0704, inset 0 0 0 1px rgba(255, 230, 180, .25), 0 4px 10px rgba(0, 0, 0, .6); }
+.card.mastery .m-medal > .ico, .m-medal > .ico { width: 58px; height: 58px; border-radius: 50%; margin: 0; }
+.card.mastery .nm { text-align: center; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 22px; line-height: 1.1; padding: 0 12px; }
+.m-god { text-align: center; font-weight: 700; font-size: 12px; letter-spacing: .24em; text-transform: uppercase;
+  color: rgba(var(--pc-rgb), 1); filter: brightness(1.45) saturate(.85); }
+.m-role { display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 12px; color: var(--bronze-hi); }
+.pips { display: inline-flex; gap: 3px; }
+.pips i { width: 8px; height: 8px; transform: rotate(45deg); border: 1px solid var(--bronze-lo); background: rgba(0, 0, 0, .4); }
+.pips i.on { background: var(--bronze-hi); border-color: #F7DDA4; }
+.card.mastery .st { text-align: center; padding: 0 16px; font-size: 13.5px; }
+.card.mastery .st.gift { text-align: left; margin: 2px 14px 0; padding: 8px 10px; border-radius: 6px; opacity: 1;
+  background: rgba(0, 0, 0, .28); border: 1px solid rgba(var(--pc-rgb), .35); }
+.card.mastery .st.gift b { color: rgba(var(--pc-rgb), 1); filter: brightness(1.45) saturate(.85); }
+.card.mastery .acts { display: flex; flex-direction: column; gap: 8px; padding: 6px 14px 0; margin-top: auto; }
+.card.mastery .acts .btn { width: 100%; min-width: 0; }
+.card.mastery.sel { border-color: rgba(var(--pc-rgb), 1);
+  box-shadow: 0 0 0 1px rgba(var(--pc-rgb), 1), 0 0 22px rgba(var(--pc-rgb), .45), 0 6px 18px rgba(0, 0, 0, .45); }
+.card.mastery.sel .m-medal { border-color: var(--ui-gold); }
+
+/* ---- кнопки хаба в духе набора: бронза с фаской; призрачные — тёмная бронза ---- */
+
+/* ---- дерево приёмов (библия §8.4): тиры рядами, активный — квадрат, пассивный — круг ---- */
+/* flex: none — у дерева overflow: hidden, и во flex-столбце тела оно иначе сжимается до нуля */
+.tree { flex: none; position: relative; display: flex; flex-direction: column; gap: 10px; padding: 0 0 14px; border-radius: 8px;
+  border: 1px solid var(--line); background: var(--glaze-2);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 6px 18px rgba(0, 0, 0, .45); overflow: hidden; }
+.tree-head { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 14px; padding: 12px 16px 12px;
+  background: rgba(var(--pc-rgb), .22);
+  border-bottom: 1px solid rgba(0, 0, 0, .6); }
+.tree-head .m-medal { width: 60px; height: 60px; margin: 0; grid-row: 1 / span 2; }
+.tree-head .m-medal > .ico { width: 44px; height: 44px; }
+.tree-head h3 { margin: 0; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 22px; color: var(--pale); }
+.tree-head .m-god { text-align: left; }
+.tree-pts { grid-column: 1 / -1; display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--pale); opacity: .9; }
+.meter { flex: 1; height: 8px; border-radius: 4px; background: rgba(0, 0, 0, .5); border: 1px solid var(--bronze-lo); overflow: hidden; }
+.meter i { display: block; height: 100%; background: rgba(var(--pc-rgb), .9); }
+.tree-grid { display: grid; grid-template-columns: 56px 1fr 1fr; gap: 10px 12px; padding: 4px 16px 0; position: relative; }
+.tree-grid::before { content: ''; position: absolute; left: 43px; top: 18px; bottom: 18px; width: 2px;
+  background: var(--line); }
+.tier { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+.tier b { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%;
+  font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--bronze-hi);
+  background: var(--glaze); border: 2px solid var(--bronze-lo); }
+.tier span { position: relative; padding: 1px 4px; border-radius: 3px; background: var(--ui-wood); font-size: 11px; color: var(--pale); opacity: .85; white-space: nowrap; }
+.tier.open b { border-color: var(--bronze-hi); }
+
+.card.sk.node { display: grid; grid-template-columns: auto 1fr auto; grid-template-rows: auto auto 1fr; gap: 2px 12px; align-items: start;
+  padding: 10px 12px; border: 1px solid rgba(110, 81, 34, .8); border-radius: 8px;
+  background: rgba(34, 25, 19, .6); }
+.node-medal { grid-column: 1; grid-row: 1 / -1; align-self: center; position: relative; width: 64px; height: 64px; display: grid; place-items: center;
+  background: var(--glaze); border: 2px solid var(--bronze-lo); }
+.node-medal.square { border-radius: 8px; }
+.node-medal.circle { border-radius: 50%; }
+.card.sk.node .node-medal > .ico { grid-column: auto; grid-row: auto; width: 50px; height: 50px; margin: 0; }
+.node-medal.circle > .ico { border-radius: 50%; }
+.node-medal.square > .ico { border-radius: 4px; }
+.card.sk.node .nm { grid-column: 2; font-size: 15px; }
+.card.sk.node .st { grid-column: 2; }
+.card.sk.node .st.kind { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; opacity: .85; }
+.card.sk.node .acts { grid-column: 3; grid-row: 1 / -1; flex-direction: column; gap: 6px; align-self: center; }
+.card.sk.node .acts .btn { min-width: 48px; width: 48px; min-height: 48px; padding: 0; font-size: 20px; }
+.node-lock { position: absolute; right: -6px; bottom: -6px; width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%;
+  background: #120C08; border: 1px solid var(--bronze-lo); color: var(--bronze-hi); }
+.node-lock svg { width: 12px; height: 12px; }
+/* четыре состояния — формой рамки, не только цветом */
+.card.sk.node[data-state="locked"] .node-medal { border-style: dashed; }
+.card.sk.node[data-state="locked"] .node-medal > .ico { filter: grayscale(1) brightness(.55); }
+.card.sk.node[data-state="locked"] .nm, .card.sk.node[data-state="locked"] .st { opacity: .6; }
+.card.sk.node[data-state="open"] .node-medal { border: 2px solid var(--bronze-hi); box-shadow: 0 0 0 3px rgba(227, 180, 92, .18); }
+.card.sk.node[data-state="learned"] .node-medal { border: 4px double rgba(var(--pc-rgb), 1); box-shadow: 0 0 10px rgba(var(--pc-rgb), .45); }
+.card.sk.node[data-state="max"] .node-medal { border: 4px double var(--ui-gold); box-shadow: 0 0 0 1px #0B0704, 0 0 14px rgba(240, 200, 122, .6); }
+.card.sk.node[data-state="max"] .node-medal::after { content: ''; position: absolute; right: -7px; top: -7px; width: 14px; height: 14px;
+  transform: rotate(45deg); background: var(--ui-gold); border: 1px solid #0B0704; }
+.card.sk.node.sel { box-shadow: 0 0 0 2px rgba(var(--pc-rgb), 1), 0 0 16px rgba(var(--pc-rgb), .35); }
+.card.sk.node .dots i { width: 7px; height: 7px; margin-left: 2px; border-radius: 1px; transform: rotate(45deg); }
+
+/* ---- панель ячеек и атрибуты — в той же бронзе ---- */
+#hub .bar { gap: 10px; }
+#hub .bar .slot { min-height: 64px; background: var(--glaze); color: var(--pale);
+  border: 2px solid var(--gc, var(--bronze-lo)); box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 2px 6px rgba(0, 0, 0, .5); }
+.attrs .card { border-left-width: 2px; }
+.attrs .card .acts .btn { min-width: 64px; }
+
+/* ---- телефон и узкие окна ---- */
+@media (max-width: 720px) {
+  .tree-grid { grid-template-columns: 44px 1fr; }
+  .tree-grid::before { left: 21px; }
+  .tier { grid-row: span 2; }
+  .tier b { width: 30px; height: 30px; font-size: 13px; }
+}
+/* узкий портрет: колонке текста узла оставалось ~76 px, и имена рвались посреди слова —
+   кнопки уходят под текст в ряд, медальон меньше */
+@media (max-width: 480px) {
+  .tree-grid { padding: 4px 10px 0; gap: 8px; }
+  .card.sk.node { grid-template-columns: auto 1fr; padding: 8px 10px; }
+  .node-medal { width: 52px; height: 52px; grid-row: 1 / span 3; }
+  .card.sk.node .node-medal > .ico { width: 40px; height: 40px; }
+  .card.sk.node .acts { grid-column: 1 / -1; grid-row: auto; flex-direction: row; justify-content: flex-end; }
+  .card.sk.node .nm, .card.sk.node .st { overflow-wrap: normal; }
+}
+@media (max-height: 460px) {
+  .card.mastery .m-band { height: 32px; }
+  .m-medal { width: 60px; height: 60px; margin-top: -30px; }
+  .card.mastery .m-medal > .ico { width: 44px; height: 44px; }
+  .card.mastery .nm { font-size: 19px; }
+  .hub-head { padding: 6px 16px 4px; }
+  .hub-head h1 { font-size: 20px; padding-bottom: 6px; }
+  .hub-tabs { padding: 2px 16px 12px; }
+  .hub-tabs .btn { min-height: 48px; font-size: 14px; padding: 4px 8px; }
+}
+
+/* ================= HUD боя (срез И2) =================
+   Та же бронза и меандр, что у Кносса. Раскладка и размеры — r3/hud.css и библия §8.2–§8.3;
+   здесь только облик. Селекторы с #hud: общий сброс «#hud *» иначе снял бы отступы. */
+
+/* сосуды: число — на бронзовой табличке под туловом */
+#hud .vessel .num { left: 50%; right: auto; transform: translateX(-50%); bottom: calc(4px * var(--ui)); padding: 1px calc(8px * var(--ui));
+  border-radius: 4px; background: var(--glaze-2); border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 rgba(255, 230, 180, .18), 0 2px 4px rgba(0, 0, 0, .6); white-space: nowrap; }
+
+/* панель приёмов — бронзовый поднос с меандром по верхней кромке */
+#hud #skills { padding: calc(10px * var(--ui)) calc(12px * var(--ui)) calc(22px * var(--ui)); border-radius: calc(10px * var(--ui));
+  background: var(--glaze-2); border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 4px 14px rgba(0, 0, 0, .6); }
+#hud #skills::before { content: ''; position: absolute; left: calc(10px * var(--ui)); right: calc(10px * var(--ui)); top: calc(-5px * var(--ui));
+  height: calc(8px * var(--ui)); border-radius: 2px; background: var(--glaze);
+  border: 1px solid var(--line); }
+#hud .slot { background: var(--glaze); border-color: var(--bronze-lo);
+  box-shadow: inset 0 0 0 1px rgba(227, 180, 92, .18), inset 0 -6px 10px rgba(0, 0, 0, .45), 0 2px 5px rgba(0, 0, 0, .6); }
+#hud .slot.ready { border-color: var(--gc, var(--bronze-hi)); box-shadow: inset 0 0 0 1px rgba(255, 230, 180, .25), 0 0 10px var(--gc, rgba(227, 180, 92, .5)), 0 2px 5px rgba(0, 0, 0, .6); }
+
+/* опыт: бронзовая полоса с делениями по 10 %; бейдж уровня — медальон с венцом делений */
+#hud #xp { background: rgba(10, 7, 4, .8); box-shadow: 0 -1px 0 var(--line); }
+#hud #xp > i { background: var(--clay-light); }
+#hud #lvl { background: var(--glaze); border: calc(2px * var(--ui)) solid var(--bronze-hi); color: var(--ui-gold);
+  box-shadow: 0 0 0 calc(3px * var(--ui)) #120C08, 0 0 0 calc(4px * var(--ui)) var(--bronze-lo), 0 3px 8px rgba(0, 0, 0, .6);
+  text-shadow: 0 1px 2px #000; }
+
+/* пауза — бронзовый медальон; миникарта — рама в два канта */
+#hud #pause { background: var(--glaze); border-color: var(--bronze);
+  box-shadow: inset 0 0 0 1px rgba(255, 230, 180, .2), 0 2px 6px rgba(0, 0, 0, .6); }
+#hud #map { border: 2px solid var(--bronze); border-radius: 4px;
+  box-shadow: 0 0 0 2px #0B0704, 0 0 0 5px var(--bronze-lo), 0 0 0 6px #0B0704, 0 4px 12px rgba(0, 0, 0, .6); }
+
+/* боссбар: имя на табличке с меандром, полоса в бронзовой раме, ромбы порогов фаз */
+#hud #boss .name { display: table; margin: 0 auto calc(6px * var(--ui)); padding: 2px calc(18px * var(--ui)) calc(6px * var(--ui)); position: relative;
+  color: var(--ui-gold); letter-spacing: .06em; background: rgba(22, 17, 13, .85); border-radius: 4px; }
+/* смена фазы (P13): вспышка обязана перебить цвет таблички — у «#hud #boss .name» специфичность
+   выше, чем у «#boss.flash .name» в hud.css, и без этого правила имя не вспыхивало (страж ТЗ, И2) */
+#hud #boss.flash .name { color: #FFF4D6; text-shadow: 0 0 10px rgba(255, 214, 140, .95), 0 0 2px #fff, 0 1px 3px #000; }
+/* карточка имени на входе хозяина (Д5а): полоса поперёк сцены, имя крупно, звание тоньше; движение — только opacity и transform, 350 мс */
+#hud #bosscard { position: absolute; left: 0; right: 0; top: 24%; text-align: center; pointer-events: none; opacity: 0; transform: translateY(calc(-10px * var(--ui)));
+  transition: opacity .35s ease, transform .35s ease; padding: calc(10px * var(--ui)) 0; background: rgba(20, 13, 8, .78); }
+#hud #bosscard.on { opacity: 1; transform: none; }
+#hud #bosscard .nm { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: max(24px, calc(38px * var(--ui))); letter-spacing: .14em; text-transform: uppercase; color: var(--ui-gold); text-shadow: 0 0 12px rgba(255, 214, 140, .55), 0 2px 4px #000; }
+#hud #bosscard .epi { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: max(13px, calc(17px * var(--ui))); letter-spacing: .08em; color: #E9DDC3; text-shadow: 0 1px 3px #000; margin-bottom: calc(2px * var(--ui)); }
+@media (prefers-reduced-motion: reduce) { #hud #bosscard { transition: none; } }
+#hud #boss .name::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: 1px; height: calc(6px * var(--ui));
+  border-bottom: 1px solid var(--line); opacity: .8; }
+#hud #boss .bar { position: relative; height: calc(14px * var(--ui)); border: calc(2px * var(--ui)) solid var(--bronze); border-radius: 3px;
+  box-shadow: 0 0 0 1px #0B0704, 0 3px 10px rgba(0, 0, 0, .6), inset 0 2px 4px rgba(0, 0, 0, .6); }
+#hud #boss .bar > i { background: #C94B30; }
+#hud #boss .pip { position: absolute; top: 50%; width: calc(10px * var(--ui)); height: calc(10px * var(--ui)); margin: calc(-5px * var(--ui)) 0 0 calc(-5px * var(--ui));
+  transform: rotate(45deg); background: #120C08; border: 2px solid var(--ui-gold); }
+#hud #boss .pip.on { background: var(--ui-gold); }
+
+/* бафы: плашка 36 — знак, заливка остатка и кольцо-таймер по краю (маска оставляет кант 3 px) */
+#hud #buffs .b { border-radius: 6px; background: var(--glaze); }
+#hud #buffs .b .left { opacity: .22; }
+#hud #buffs .b .ring { position: absolute; inset: 0; border-radius: 4px; padding: 3px;
+  background: conic-gradient(var(--bc, var(--bronze-hi)) calc(var(--p, 1) * 1turn), rgba(0, 0, 0, .55) 0);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0); }
+
+/* телефон: стик — бронзовое кольцо с делениями, атака — медальон, приёмы и зелье — медальоны */
+#hud #stick { border: 2px solid var(--bronze-lo); background: rgba(12, 8, 5, .3);
+  box-shadow: inset 0 0 0 6px rgba(12, 8, 5, .25), 0 0 0 1px rgba(11, 7, 4, .6); }
+#hud #stick > i { background: #4A3A1E; border-color: var(--bronze-hi);
+  box-shadow: inset 0 0 0 2px rgba(255, 230, 180, .15), 0 3px 8px rgba(0, 0, 0, .6); }
+#hud #atk { border: 3px solid var(--bronze-hi); box-shadow: 0 0 0 3px #0B0704, 0 0 0 5px var(--bronze-lo), 0 4px 12px rgba(0, 0, 0, .6); }
+#hud .arc, #hud #potion { background: var(--glaze); border-color: var(--bronze);
+  box-shadow: inset 0 0 0 1px rgba(255, 230, 180, .18), 0 2px 6px rgba(0, 0, 0, .6); }
+#hud .arc:not(.empty):not(.cooling) { border-color: var(--gc, var(--bronze-hi)); }
+#hud #potion { border-radius: 50%; }
+
+/* подпись зоны — бронзовая табличка с меандром; подсказка и тост — в той же раме */
+#zone-name { top: 14px; padding: 5px 14px 9px; border-radius: 6px; font-size: 17px; color: var(--ui-gold); opacity: 1; letter-spacing: .03em;
+  background: rgba(22, 17, 13, .88); border: 1px solid var(--line);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 3px 10px rgba(0, 0, 0, .5); }
+#zone-name:empty { display: none; }
+/* На узком окне табличка зоны уступает место боссбару: при 844 px полоса хозяина начинается у
+   253 px, а длинное имя зоны по-русски доходит дальше (страж ТЗ, И2). */
+@media (max-width: 1100px) { body.boss-on #zone-name { display: none; } }
+body.touch.boss-on #zone-name { display: none; }
+#zone-name::after { content: ''; position: absolute; left: 10px; right: 10px; bottom: 3px; height: 5px;
+  background: var(--ui-meander) left center / 5px 5px repeat-x; opacity: .75; }
+#hud #hint, #toast { background: rgba(22, 17, 13, .92); border-color: var(--line);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 4px 12px rgba(0, 0, 0, .55); }
+
+/* ================= Кносс: лист героя, тропа Акта, журнал (срез И3) ================= */
+.hub-body[data-screen="hero"], .hub-body[data-screen="journal"] { max-width: 1180px; gap: 14px; }
+
+/* лист героя: портрет в двойной раме с табличкой и опытом, рядом статы группами и «В путь» */
+.sheet { flex: none; display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: start; }
+.hero-card { position: relative; width: 240px; border-radius: 8px; overflow: hidden; background: #1B130C; border: 2px solid var(--bronze);
+  box-shadow: 0 0 0 2px #0B0704, 0 0 0 5px var(--bronze-lo), 0 6px 18px rgba(0, 0, 0, .55); }
+.portrait-cv { display: block; width: 240px; height: 320px; touch-action: pan-y; cursor: grab; }
+.portrait-cv:active { cursor: grabbing; }
+/* знак поворота (И3б): дуга со стрелками на обоих концах в нижнем углу кадра — подсказка, клики проходят сквозь неё */
+.hero-card .turn-mark { position: absolute; top: 290px; right: 10px; width: 40px; height: 20px; color: var(--bronze-hi); opacity: .85; pointer-events: none;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .8)); }
+.hero-card .turn-mark svg { display: block; width: 100%; height: 100%; }
+.hero-card .plate { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; padding: 8px 12px 10px;
+  background: var(--glaze-2); border-top: 1px solid var(--line); }
+.hero-card .plate b { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 21px; color: var(--ui-gold); }
+.hero-card .plate span { font-size: 14px; color: var(--pale); }
+.hero-card .meter.xp { height: 7px; border-radius: 0; border-width: 1px 0 0; }
+.hero-card .meter.xp i { width: 100%; transform-origin: left center; background: var(--clay-light); }
+.stat-side { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-content: start; }
+.stat-grp { padding: 10px 14px 12px; border-radius: 8px; border: 1px solid var(--line);
+  background: var(--glaze-2); box-shadow: inset 0 0 0 1px var(--ui-line-2), 0 4px 12px rgba(0, 0, 0, .4); }
+.stat-grp h4 { margin: 0 0 6px; padding-bottom: 14px; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 18px; color: var(--bronze-hi);
+  border-bottom: 1px solid var(--line); }
+.stat-row { display: flex; justify-content: space-between; gap: 12px; padding: 5px 0; font-size: 14px; color: var(--pale); border-bottom: 1px dashed rgba(227, 180, 92, .16); }
+.stat-row:last-child { border-bottom: 0; }
+.stat-row b { color: var(--ui-gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat-row span { display: inline-block; }
+.stat-row span::first-letter { text-transform: uppercase; }   /* подписи TEXT — со строчной: они же идут внутри строк */
+.stat-side #btn-go { grid-column: 1 / -1; }
+
+/* тропа Акта: акт — заголовок с меандром; зона — медальон на рельсе, пройденная — золото */
+.route { flex: none; display: flex; flex-direction: column; gap: 10px; }
+/* засечный, а не Philosopher: у него «I» акта читается как «l» */
+.route-act { margin-top: 6px; padding-bottom: 14px; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 19px; color: var(--ui-gold);
+  background: var(--ui-meander) left bottom / 8px 8px repeat-x; }
+.route .card.zone { grid-template-columns: auto 1fr auto; column-gap: 14px; position: relative; border-left-width: 1px;
+  border-color: var(--line); background: var(--glaze-2); box-shadow: inset 0 0 0 1px var(--ui-line-2); }
+.route .card.zone + .card.zone::before { content: ''; position: absolute; left: 37px; top: -12px; width: 2px; height: 12px; background: var(--bronze-lo); }
+.route-medal { grid-column: 1; grid-row: 1 / span 3; align-self: center; width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--glaze); border: 2px solid var(--bronze-lo);
+  font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-weight: 700; font-size: 17px; color: var(--bronze-hi); }
+.route .card.zone .nm, .route .card.zone .st { grid-column: 2; min-width: 0; }
+.route .card.zone .nm { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 18px; }
+.route .card.zone .acts { grid-column: 3; grid-row: 1 / span 3; }
+.route .card.zone.done .route-medal { border: 4px double var(--ui-gold); color: var(--ui-gold); }
+.route .card.zone.open .route-medal { border-color: var(--bronze-hi); box-shadow: 0 0 12px rgba(227, 180, 92, .45); }
+.route .card.zone.locked .route-medal { border-style: dashed; }
+.route .card.zone .boss-mark { color: #E88A62; opacity: 1; font-weight: 700; }
+/* знак хозяина: лабрис — двойной топор Кносса, один на всех боссов, имя рядом; картинка из данных, не извне */
+.route .card.zone .boss-mark::before { content: ''; display: inline-block; width: 20px; height: 20px; margin-right: 6px; vertical-align: -4px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 3v19' stroke='%23E3B45C' stroke-width='2' stroke-linecap='round'/><path d='M11 5L4.5 2.5Q1 8.5 4.5 14.5L11 12zM13 5l6.5-2.5Q23 8.5 19.5 14.5L13 12z' fill='%23E3B45C' stroke='%23120C08' stroke-width='.8' stroke-linejoin='round'/></svg>") center / contain no-repeat; }
+.route .card.zone.abyss .route-medal { background: #1B1426; color: #C9B6F0; }
+.route .card.zone.daily .route-medal { background: #241A0C; color: var(--ui-gold); }   /* точный цвет игры: прежние цвета редкости не повторяются (rarity-probe) */   /* Лабиринт дня (Л2б): медальон — номер этажа забега */
+/* двери клятв Бездны (Л1б): два выбора под медальоном, выбранная — в кайме цвета первой клятвы */
+.oath-doors { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 4px; }
+.oath-door { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; min-height: 48px; padding: 8px 10px; text-align: left; cursor: pointer;
+  font: inherit; color: inherit; background: var(--glaze); border: 2px solid var(--bronze-lo); border-radius: 4px; }
+.oath-door b { font-weight: 700; color: var(--oc, var(--ui-gold)); }
+.oath-door .mod { font-size: 13px; }
+.oath-door .mod.good { color: #8FD08A; }
+.oath-door .mod.bad { color: #E88A62; }
+.oath-door.sel { border-color: var(--oc, var(--ui-gold)); box-shadow: 0 0 10px rgba(227, 180, 92, .35); background: var(--glaze-2); }
+.oath-door:focus-visible { outline: 2px solid var(--clay-light); outline-offset: 2px; }
+/* Нить Ариадны (Л3б): четыре ветви столбцами, узел — кнопка; завязанный — золотая кайма, доступный — бронза, закрытый — приглушён */
+.knots { margin-top: 18px; padding: 14px 16px; background: var(--glaze-2); border: 1px solid var(--line); border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ui-line-2); }
+.knots-h { margin: 0 0 4px; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 19px; color: var(--ui-gold); }
+.knot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 8px; }
+.knot-br { display: flex; flex-direction: column; gap: 6px; }
+.knot-brn { font-weight: 700; color: var(--clay-light); }
+.knot { display: flex; justify-content: space-between; align-items: center; gap: 6px; min-height: 48px; padding: 6px 10px; text-align: left;
+  font: inherit; font-size: 13px; color: var(--slip); background: var(--glaze); border: 2px solid var(--bronze-lo); border-radius: 4px; cursor: pointer; }
+.knot .kc { white-space: nowrap; opacity: .85; }
+.knot.tied { border-color: var(--ui-gold); background: var(--glaze-2); }   /* золото; --madder в интерфейсе К1 не применяется (buttons-probe) */
+.knot.tied .kc { color: var(--ui-gold); opacity: 1; }
+.knot.locked { color: var(--off); border-style: dashed; cursor: default; }   /* без прозрачности: под панелью сцена, текст должен читаться */
+.knot:focus-visible { outline: 2px solid var(--clay-light); outline-offset: 2px; }
+.ovl .skein { color: #C9B6F0; font-weight: 700; }
+/* Контракты Гимнасия (Л4б): наверху журнала; строка — задание, полоса, счёт и кнопка Дара; готовый — золотая кайма */
+.contracts:not(:empty) { margin-bottom: 14px; padding: 14px 16px; background: var(--glaze-2); border: 1px solid var(--line); border-radius: 4px; box-shadow: inset 0 0 0 1px var(--ui-line-2); }
+.contracts-h { margin: 0 0 4px; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 19px; color: var(--ui-gold); }
+.contract { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.contract .ct-name { color: var(--slip); }
+.contract .ct-n { font-size: 13px; color: var(--slip-dim); font-variant-numeric: tabular-nums; }
+.ct-bar { height: 6px; margin: 6px 0 4px; background: var(--glaze); border: 1px solid var(--bronze-lo); border-radius: 3px; overflow: hidden; }
+.ct-bar i { display: block; height: 100%; background: var(--clay); }
+.contract.ready .ct-bar i { background: var(--ui-gold); }
+.contract.done .ct-name { color: var(--slip-dim); }
+.contract .btn { min-height: 48px; min-width: 120px; }
+/* Серия Даров (Л5): семь клеток цикла под шкалами гарантий; клетки с наградой — ромб-рамка */
+/* Г5: вспышка уровня (только opacity, ≤ 400 мс — инвариант 5) и карточка Титула */
+#level-flash { position: fixed; inset: 0; pointer-events: none; z-index: 30; opacity: 0; transition: opacity 380ms ease-out;
+  background: rgba(240, 200, 122, .22); }   /* ровная золотая дымка: градиенты в интерфейсе — только сосудам (buttons-probe) */
+#level-flash.on { opacity: 1; transition-duration: 120ms; }
+@media (prefers-reduced-motion: reduce) { #level-flash { display: none; } }
+.title-card { max-width: 520px; text-align: center; border: 2px solid var(--ui-gold); }
+.title-card .title-kicker { letter-spacing: .12em; text-transform: uppercase; font-size: 13px; color: var(--ui-gold); margin: 0; }
+.title-card h2 { font-size: 30px; color: var(--ui-gold); }
+/* Г4а: окно первого мастерства — три карточки школ (те же .card.mastery, что во вкладке «Навыки»); на низком окне
+   столбец прокручивается сам, страница — нет. Движение — то же, что у всех .ovl .col (transform, opacity, 240 мс). */
+#ovl-pickgod .col.pickgod { width: min(94vw, 980px); max-width: min(94vw, 980px); max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px);
+  overflow-y: auto; overscroll-behavior: contain; touch-action: pan-y; padding: 20px 16px; gap: 12px; }
+.pg-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr)); gap: 12px; width: 100%; }
+.pg-cards .card.mastery .m-band { height: 36px; }
+.pg-cards .card.mastery .m-medal { width: 64px; height: 64px; margin-top: -32px; }
+.pg-cards .card.mastery .m-medal > .ico { width: 48px; height: 48px; }
+.event-line { padding: 10px 14px; border: 1px solid var(--ui-gold); border-radius: 4px; background: var(--glaze-2); color: var(--ui-gold); font-weight: 700; }   /* Л7: событие площадки */
+.streak { display: flex; flex-direction: column; gap: 6px; }
+.streak-n { font-size: 13px; color: var(--slip-dim); }
+.streak-cells { display: flex; gap: 6px; }
+.streak-cells i { width: 18px; height: 18px; border: 1px solid var(--bronze-lo); border-radius: 3px; background: var(--glaze); }
+.streak-cells i.on { background: var(--clay); border-color: var(--clay-light); }
+.streak-cells i.mark { box-shadow: 0 0 0 2px var(--ui-line), inset 0 0 0 2px var(--glaze); }
+
+/* журнал: задание — свиток с бронзовыми валиками, имя NPC — табличка, реплика курсивом */
+.hub-body[data-screen="journal"] .card.quest { position: relative; border: 1px solid var(--line); border-left-width: 1px; border-radius: 4px; padding: 14px 16px;
+  background: var(--glaze-2);
+  box-shadow: inset 0 0 0 1px rgba(227, 180, 92, .12), 0 4px 12px rgba(0, 0, 0, .45); }
+.hub-body[data-screen="journal"] .card.quest::before, .hub-body[data-screen="journal"] .card.quest::after { content: ''; position: absolute; left: -4px; right: -4px; height: 6px; border-radius: 3px;
+  background: var(--clay); }
+.hub-body[data-screen="journal"] .card.quest::before { top: -3px; } .hub-body[data-screen="journal"] .card.quest::after { bottom: -3px; }
+.hub-body[data-screen="journal"] .card.quest .nm { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 18px; color: var(--ui-gold); }
+.hub-body[data-screen="journal"] .card.quest .who { display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 3px; font-family: 'PT Sans', system-ui, sans-serif; font-size: 12px;
+  color: var(--pale); background: rgba(0, 0, 0, .35); border: 1px solid var(--bronze-lo); vertical-align: middle; }
+.hub-body[data-screen="journal"] .card.quest .say { padding-left: 12px; border-left: 2px solid rgba(227, 180, 92, .35); }
+.hub-body[data-screen="journal"] .card.quest.main { border-color: var(--bronze); }
+.hub-body[data-screen="journal"] .group { padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+
+@media (max-width: 640px) {
+  .sheet { grid-template-columns: 1fr; justify-items: center; }
+  .stat-side { width: 100%; }
+}
+@media (max-width: 420px) { .stat-side { grid-template-columns: 1fr; } }
+
+/* ================= Кузница: кукла, сумка, карточка вещи (срез И4а, библия §8.4) ================= */
+.hub-body[data-screen="gear"] { max-width: 1240px; }
+.forge { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-start; justify-content: center; }
+.forge-views { display: none; }
+/* кукла: слоты в две колонки по сторонам живого героя, рама двойная, как у листа героя */
+.doll { flex: none; display: grid; grid-template-columns: 64px minmax(0, 160px) 64px; grid-template-rows: repeat(3, 72px); gap: 0 10px;
+  align-items: center; justify-items: center; padding: 10px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--glaze-2); box-shadow: inset 0 0 0 1px var(--ui-line-2, rgba(227, 180, 92, .12)); }
+.doll-frame { grid-column: 2; grid-row: 1 / span 3; border: 2px solid var(--bronze); border-radius: 8px; overflow: hidden; background: #1B130C;
+  box-shadow: 0 0 0 3px #120C08, 0 0 0 4px var(--bronze-lo); }
+.doll-cv { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; touch-action: pan-y; cursor: grab; }
+.doll .slot[data-gear="helm"] { grid-column: 1; grid-row: 1; } .doll .slot[data-gear="weapon"] { grid-column: 1; grid-row: 2; }
+.doll .slot[data-gear="armor"] { grid-column: 1; grid-row: 3; } .doll .slot[data-gear="amulet"] { grid-column: 3; grid-row: 1; }
+.doll .slot[data-gear="shield"] { grid-column: 3; grid-row: 2; } .doll .slot[data-gear="ring"] { grid-column: 3; grid-row: 3; }
+#hub .doll .slot { width: 64px; height: 64px; padding: 0; display: grid; place-items: center; cursor: pointer; border-radius: 8px;
+  border: 2px solid var(--bronze-lo); background: var(--glaze); color: var(--bronze); }
+#hub .doll .slot.empty { border: 1px solid var(--line); }   /* И3: пустая ячейка — одна линия --slip ~20 %, без пунктира и бронзы */
+#hub .doll .slot.sel { box-shadow: 0 0 0 2px #120C08, 0 0 0 4px var(--slip); }   /* выбор — состояние, не рамка: кольцо вне ячейки светлым --slip, не золотом */
+#hub .doll .slot .ico { width: 52px; height: 52px; }
+#hub .doll .slot svg { width: 34px; height: 34px; opacity: .5; }
+/* сумка: сетка клеток; вещь ложится на свой футпринт, редкость — рамкой самой иконки (печь иконок её уже рисует) */
+.bag { flex: 0 1 auto; min-width: 0; max-width: 100%; box-sizing: border-box; padding: 10px 12px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--glaze-2); }
+.bag-head { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 18px; color: var(--bronze-hi); padding-bottom: 12px; margin-bottom: 10px;
+  border-bottom: 1px solid var(--line); }
+.bag-head span { font-family: 'PT Sans', system-ui, sans-serif; font-size: 14px; color: var(--pale); opacity: .7; }
+.bag-grid { display: grid; grid-template-columns: repeat(var(--cols), 48px); grid-auto-rows: 48px; gap: 3px; }
+.bag-grid .cell { border-radius: 3px; background: rgba(0, 0, 0, .35); border: 1px solid var(--line); }   /* пустая клетка: одна линия --slip ~20 % (И3) */
+#hub .bag-item { position: relative; z-index: 1; padding: 2px; min-width: 0; min-height: 0; cursor: pointer; border-radius: 4px;
+  border: 1px solid rgba(227, 180, 92, .28); background: var(--glaze); display: grid; place-items: center; }
+#hub .bag-item .ico { width: 100%; height: 100%; max-width: 100%; max-height: 100%; object-fit: contain; }
+/* И3: оружие занимает весь след FOOT: клетка уже имеет форму следа (grid-area), файл квадратный 128, предмет вписан в прямоугольник следа
+   (pipeline/icons.js) — cover снимает поля, а не режет предмет; без отступа, чтобы картинка шла вплотную к рамке редкости */
+#hub .bag-item[data-slot="weapon"] { padding: 0; }
+#hub .bag-item[data-slot="weapon"] .ico { object-fit: cover; object-position: 50% 50%; }
+#hub .bag-item.fit { box-shadow: 0 0 7px 1px rgba(239, 227, 203, .35); }   /* подходит в выбранный слот: мягкое свечение вне клетки, не рамка (И3) */
+#hub .bag-item.sel { box-shadow: 0 0 0 2px #120C08, 0 0 0 4px var(--slip); z-index: 2; }
+.bag .note { max-width: 100%; overflow-wrap: anywhere; }
+/* карточка вещи — тултип §8.4: имя цветом редкости, строки базы, набор, сравнение, ценность */
+.forge-cards { flex: 0 1 340px; min-width: 320px; display: flex; flex-direction: column; gap: 12px; }
+.forge-cards .forge-close { display: none; }
+.hub-body .card.tip { display: flex; flex-direction: column; gap: 6px; width: 100%; max-width: 448px; box-sizing: border-box; padding: 12px 14px;
+  border: 1px solid var(--rar, var(--bronze-lo)); border-left-width: 1px; border-radius: 6px; background: var(--glaze);   /* лак, не --glaze-2: имя Глины и Пурпура держит >= 4:1 только на нём (К2) */
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .6), 0 6px 16px rgba(0, 0, 0, .5); }
+.hub-body .card.tip.ref { opacity: .92; }
+.hub-body .card.tip .tip-tag { align-self: flex-start; padding: 1px 8px; border-radius: 3px; font-size: 12px; color: var(--pale);
+  background: rgba(0, 0, 0, .35); border: 1px solid var(--bronze-lo); }
+.hub-body .card.tip .tip-head { display: flex; gap: 12px; align-items: center; padding-bottom: 10px; border-bottom: 1px solid var(--line); }
+.hub-body .card.tip .tip-head .ico { flex: none; width: 56px; height: 56px; border-radius: 6px; border: 0; background: #120C08; }   /* рамку редкости несёт сама карточка (К2); вторая у иконки — лишняя (И3) */
+.hub-body .card.tip .tip-title { min-width: 0; }
+.hub-body .card.tip .nm { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 19px; line-height: 1.2; overflow-wrap: anywhere; }
+.hub-body .card.tip .kind { font-size: 13px; color: var(--pale); opacity: .75; }
+.hub-body .card.tip .st { opacity: 1; font-size: 14px; }
+.hub-body .card.tip .stats .ln { padding: 2px 0; color: var(--pale); }
+.hub-body .card.tip .stats .ln + .ln { border-top: 1px dashed rgba(227, 180, 92, .14); }
+.hub-body .card.tip .set { color: #8FC98A; }
+.hub-body .card.tip .value { display: flex; align-items: center; gap: 6px; color: var(--bronze-hi); }
+.hub-body .card.tip .value svg { width: 18px; height: 18px; }
+.hub-body .card.tip .acts { flex-direction: row; flex-wrap: wrap; gap: 8px; }
+.hub-body .card.tip .acts .btn { flex: 1 1 128px; }
+/* узкое окно: кукла и сумка вкладками, карточка — листом поверх, закрытие 48 */
+@media (max-width: 900px) {
+  .forge-views { display: flex; gap: 8px; width: 100%; justify-content: center; }
+  #hub .forge-views .btn { min-width: 0; flex: 1 1 0; max-width: 260px; }
+  #hub .forge-views .btn.sel { background: var(--glaze-2); border-color: var(--clay-light); }
+  .doll { max-width: 100%; box-sizing: border-box; grid-template-columns: 56px minmax(0, 170px) 56px; }
+  #hub .doll .slot { width: 56px; height: 56px; }
+  #hub .doll .slot .ico { width: 44px; height: 44px; }
+  .forge[data-view="doll"] .bag, .forge[data-view="bag"] .doll { display: none; }
+  .forge-cards { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; max-height: 86vh; overflow-y: auto; min-width: 0;
+    flex-flow: row wrap; justify-content: center; align-items: flex-start; gap: 10px; padding: 8px 12px 14px; box-sizing: border-box;
+    background: var(--glaze-2); border-top: 2px solid var(--bronze); box-shadow: 0 -8px 24px rgba(0, 0, 0, .6); }
+  .forge.sheet-on .forge-cards { display: flex; }
+  .forge-cards .forge-close { display: grid; place-items: center; flex: 0 0 100%; order: -1; justify-self: end; }
+  #hub .forge-cards .forge-close { min-width: 48px; width: 48px; height: 48px; padding: 0; margin-left: calc(100% - 48px); flex: 0 0 48px; }   /* своя строка справа: карточки ниже */
+  #hub .forge-cards .forge-close svg { width: 22px; height: 22px; }
+  .hub-body .card.tip { flex: 1 1 300px; }
+}
+
+/* ================= Лавка, Дары, Трофеи (срез И4б) ================= */
+.hub-body[data-screen="shop"], .hub-body[data-screen="gifts"], .hub-body[data-screen="trophies"] { max-width: 1240px; }
+/* Лавка: прилавок — полка с плитками товаров; цена — монетой под иконкой, купленное — отметкой */
+.stall-shelf { flex: 0 1 auto; min-width: 0; max-width: 100%; box-sizing: border-box; padding: 10px 12px 14px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--glaze-2); }
+.stall-grid { display: grid; grid-template-columns: repeat(auto-fill, 104px); gap: 10px; max-width: 600px; }
+#hub .ware { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 104px; min-width: 0; min-height: 0; padding: 8px 6px 6px;
+  cursor: pointer; border-radius: 6px; border: 1px solid rgba(227, 180, 92, .28); color: var(--pale);
+  background: var(--glaze); box-shadow: inset 0 -10px 0 -6px rgba(0, 0, 0, .45); }
+#hub .ware .ico { width: 72px; height: 72px; }
+#hub .ware .price { display: flex; align-items: center; gap: 4px; font-size: 15px; color: var(--bronze-hi); }
+#hub .ware .price svg { width: 18px; height: 18px; }
+#hub .ware.owned { opacity: .6; } #hub .ware.owned .price { color: #8FC98A; }
+#hub .ware.poor .price b { color: #E07A5F; }
+#hub .ware.sel { box-shadow: 0 0 0 2px #120C08, 0 0 0 4px var(--slip); }
+/* Дары: сундук в двойной раме, шкалы гарантий цветом ступени, раскрытие на свечении редкости */
+.hub-body > .gift { flex-direction: row; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 16px; }
+.gift-altar { flex: 0 1 380px; min-width: 0; max-width: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  padding: 16px 18px 18px; border-radius: 10px; border: 1px solid var(--line); background: var(--glaze-2);
+  box-shadow: inset 0 0 0 1px var(--ui-line-2, rgba(227, 180, 92, .12)); }
+.gift-altar .chest { width: 150px; padding: 10px 16px 6px; border-radius: 8px; background: rgba(239, 227, 203, .05);
+  border-bottom: 2px solid var(--bronze-lo); }
+.gift-altar .chest svg { display: block; width: 100%; height: auto; }
+.pity-meters { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.pity-meter { display: grid; grid-template-columns: 76px 1fr auto; align-items: center; gap: 10px; font-size: 14px; color: var(--pale); padding: 4px 8px; border-radius: 4px; background: var(--glaze); }   /* лак под меткой цвета редкости: Пурпур держит >= 4:1 только на нём (К2) */
+.pity-meter .lbl { color: var(--rar); font-weight: 700; }
+.pity-meter .pity-bar { height: 8px; border-radius: 4px; overflow: hidden; background: rgba(0, 0, 0, .45); border: 1px solid var(--bronze-lo); }
+.pity-meter .pity-bar i { display: block; width: 100%; height: 100%; transform-origin: left center; background: var(--rar); }
+.pity-meter .n { font-variant-numeric: tabular-nums; opacity: .8; }
+.hub-body > .gift .gift-altar .btn.big { min-width: 0; width: 100%; }
+.hub-body > .gift .gift-altar .btn.rv { width: 100%; }
+.hub-body > .gift .reveal { flex: 0 1 480px; min-width: 0; box-sizing: border-box; padding: 16px; gap: 8px; border: 2px solid var(--rar, var(--bronze-lo));
+  background: rgba(var(--rar-rgb, 227, 180, 92), .12); }
+.hub-body > .gift .reveal .ico.big { width: 112px; height: 112px; filter: drop-shadow(0 0 14px var(--rar, #E3B45C)); }
+/* Трофеи: бестиарий медальонами; венок со счётом побед, у хозяев — лабрис; стихии — чипами */
+.hub-body .trophy-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; align-items: start; }
+.hub-body .trophy { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; padding: 12px 10px 14px; border-radius: 10px;
+  border: 1px solid var(--line); background: var(--glaze-2); }
+.hub-body .trophy .medal { position: relative; width: 96px; height: 96px; border-radius: 50%; display: grid; place-items: center; color: var(--bronze-hi);
+  background: var(--glaze); border: 3px double var(--bronze); margin-bottom: 4px; overflow: visible; }
+.hub-body .trophy .medal .pic { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.hub-body .trophy .medal .wreath { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); color: #8C6A34; }
+.hub-body .trophy .medal b { position: absolute; right: -6px; bottom: -6px; min-width: 28px; padding: 0 5px; border-radius: 14px; background: var(--glaze); border: 1px solid var(--bronze); text-align: center; line-height: 26px; font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 22px; color: var(--ui-gold); }
+.hub-body .trophy .medal .labrys { position: absolute; top: -8px; right: -6px; width: 26px; height: 26px; color: var(--ui-gold);
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .8)); }
+.hub-body .trophy.boss .medal { border-color: var(--ui-gold); box-shadow: 0 0 12px rgba(240, 200, 122, .35); }
+.hub-body .trophy.locked { opacity: 1; }
+.hub-body .trophy.locked .nm { color: var(--pale); font-size: 15px; }
+.hub-body .trophy .nm { font-family: 'Philosopher', 'PT Sans', system-ui, sans-serif; font-size: 17px; color: var(--ui-gold); }
+.hub-body .trophy .st.res { line-height: 1.8; color: var(--pale); }
+.hub-body .trophy .el-chip { display: inline-block; padding: 0 7px; margin: 1px 0; border-radius: 10px; font-size: 12px; line-height: 20px;
+  color: #120C08; background: var(--el); font-weight: 700; }
+/* телефон в ландшафте: низкое окно — сундук меньше, чтобы кнопка и выпавший дар были ближе */
+@media (max-height: 460px) {
+  .gift-altar { padding: 10px 14px 12px; gap: 8px; }
+  .gift-altar .chest { width: 84px; padding: 4px 10px 2px; }
+}
+@media (max-width: 900px) {
+  .stall-grid { grid-template-columns: repeat(auto-fill, 96px); gap: 8px; }
+  #hub .ware { width: 96px; }
+  .hub-body .trophy-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .hub-body .trophy .medal { width: 80px; height: 80px; }
+}
+
+/* ---- К2: рамка редкости — второй канал после цвета (CSS рисует её одна, по data-rarity) ----
+   Глина — одинарная линия; Бронза — двойная; Серебро — одинарная + уголки; Пурпур — двойная + уголки;
+   Золото гимнасия — двойная + уголки + насечка. Внешняя линия — border узла (цвет --rc), внутренняя —
+   ::after, уголки и насечка — ::before (маска из SVG, градиентов нет), выступают на 2 px за внешний край. Рисуют ячейки куклы, сумки, лавки,
+   карточка вещи и раскрытие Даров. Пока иконки несут вшитую рамку (печь иконок, И1), на ячейке она видна
+   второй, внутренней; её снимет И1/И3, CSS-рамка остаётся единственной. */
+:is(#hub .doll .slot, #hub .bag-item, #hub .ware, .hub-body .card.tip, .hub-body > .gift .reveal)[data-rarity] {
+  position: relative; border-color: var(--rc); --bw: 1px; }
+#hub .doll .slot[data-rarity], .hub-body > .gift .reveal[data-rarity] { --bw: 2px; }   /* ширина border узла: уголки отсчитываются от внешнего края */
+[data-rarity="0"] { --rc: var(--r0); } [data-rarity="1"] { --rc: var(--r1); } [data-rarity="2"] { --rc: var(--r2); }
+[data-rarity="3"] { --rc: var(--r3); } [data-rarity="4"] { --rc: var(--r4); }
+:is(#hub .doll .slot, #hub .bag-item, #hub .ware, .hub-body .card.tip, .hub-body > .gift .reveal):is([data-rarity="1"], [data-rarity="3"], [data-rarity="4"])::after {
+  content: ""; position: absolute; inset: 2px; border: 1px solid var(--rc); border-radius: 2px; pointer-events: none; }
+:is(#hub .doll .slot, #hub .bag-item, #hub .ware, .hub-body .card.tip, .hub-body > .gift .reveal):is([data-rarity="2"], [data-rarity="3"], [data-rarity="4"])::before {
+  content: ""; position: absolute; inset: calc(-2px - var(--bw)); background: var(--rc); pointer-events: none;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: left top, right top, left bottom, right bottom;
+  mask-position: left top, right top, left bottom, right bottom;
+  -webkit-mask-size: 10px 10px; mask-size: 10px 10px;
+  -webkit-mask-image: var(--k2-corners); mask-image: var(--k2-corners); }
+:is(#hub .doll .slot, #hub .bag-item, #hub .ware, .hub-body .card.tip, .hub-body > .gift .reveal)[data-rarity="4"]::before {
+  -webkit-mask-position: left top, right top, left bottom, right bottom, center top; mask-position: left top, right top, left bottom, right bottom, center top;
+  -webkit-mask-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px, 9px 5px; mask-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px, 9px 5px;
+  -webkit-mask-image: var(--k2-corners), var(--k2-notch); mask-image: var(--k2-corners), var(--k2-notch); }
+:root {
+  --k2-corners: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M0 0h10v3H3v7H0z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M10 0v10H7V3H0V0z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M0 10V0h3v7h7v3z'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M10 10H0V7h7V0h3z'/%3E%3C/svg%3E");
+  --k2-notch: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 9 5'%3E%3Cpath d='M0 0h9L4.5 5z'/%3E%3C/svg%3E");
+}
+
+/* ---- И4a: табличка с именем вещи на земле. Узел кладёт слой мира (r3/world.js), двигает transform; цвет — CONFIG.RARITY_COLORS inline ---- */
+.loot-plate {
+  position: fixed; left: 0; top: 0; pointer-events: none; user-select: none; white-space: nowrap;
+  padding: 2px 8px; border-radius: 3px; background: rgba(22, 17, 13, .86); box-shadow: 0 0 0 1px rgba(239, 227, 203, .2);
+  font: 700 13px/18px "PT Sans", system-ui, sans-serif; text-shadow: 0 1px 0 rgba(0, 0, 0, .7);
+  transition: opacity 120ms linear; will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) { .loot-plate { transition: none; } }
+
+/* ---- T06 (F06): Кносс на телефоне — высота ≤ 420 или ширина ≤ 700: шапка в одну строку, вкладки одним рядом
+   из семи знаков без подписей (подпись — aria-label и .hub-cur в шапке), «В путь» прилипает к низу тела ---- */
+@media (max-height: 420px), (max-width: 700px) {
+  .hub-head { gap: 8px; padding: 4px 12px 2px; flex-wrap: nowrap; }
+  .hub-head h1 { flex: none; font-size: 18px; padding-bottom: 4px; }
+  .hub-head .hub-cur { display: block; flex: 1 1 0; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: 16px; color: var(--ui-gold); }
+  .hub-head .drx { flex: none; padding: 2px 10px 2px 4px; }
+  .hub-head .drx svg { width: 24px; height: 24px; }
+  .hub-tabs { flex-wrap: nowrap; gap: 0; padding: 2px 0 6px; }   /* ряд без полей: на 360 с классической полосой прокрутки (15 px) вкладка остаётся ≥ 48 (было 44 — buttons-probe) */
+  .hub-tabs .btn { flex: 1 1 0; min-width: 0; min-height: 48px; height: 48px; padding: 0; }
+  .hub-tabs .btn > span { display: none; }
+  .hub-tabs .btn .tab-ico { width: 26px; height: 26px; }
+  .hub-tabs .btn.sel::before { bottom: -7px; }
+  .hub-body[data-screen="hero"] #btn-go { position: sticky; bottom: 4px; z-index: 3; box-shadow: 0 0 0 4px rgba(14, 10, 6, .7), 0 6px 16px rgba(0, 0, 0, .6); }
+}
+@media (max-width: 359px) { .hub-tabs { flex-wrap: wrap; gap: 4px; } .hub-tabs .btn { flex: 1 1 48px; } }   /* 320: семь по 48 не влезают в ряд — два ряда, но не меньше 48 */

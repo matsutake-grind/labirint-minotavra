@@ -1,0 +1,921 @@
+{
+ "boss-cerberus": {
+  "attack": {
+   "contact": 620,
+   "len": 820,
+   "loop": false
+  },
+  "bite0": {
+   "contact": 1000,
+   "head": "head-c",
+   "len": 1200,
+   "loop": false
+  },
+  "bite1": {
+   "contact": 340,
+   "head": "head-l",
+   "len": 540,
+   "loop": false
+  },
+  "bite2": {
+   "contact": 340,
+   "head": "head-r",
+   "len": 540,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1900,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1000,
+   "len": 1250,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 360,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 5000,
+   "loop": true
+  },
+  "markers": [
+   {
+    "bone": "head-c",
+    "eyeL": [
+     0.118,
+     0.235,
+     -0.065
+    ],
+    "eyeR": [
+     -0.118,
+     0.235,
+     -0.065
+    ],
+    "mouth": [
+     0.0,
+     0.4,
+     0.1
+    ],
+    "mouthDir": [
+     0.0,
+     0.9439,
+     0.3304
+    ]
+   },
+   {
+    "bone": "head-l",
+    "eyeL": [
+     0.0256,
+     0.235,
+     0.1323
+    ],
+    "eyeR": [
+     0.0981,
+     0.235,
+     -0.0923
+    ],
+    "mouth": [
+     -0.0952,
+     0.4,
+     -0.0307
+    ],
+    "mouthDir": [
+     -0.3144,
+     0.9439,
+     -0.1015
+    ]
+   },
+   {
+    "bone": "head-r",
+    "eyeL": [
+     -0.0981,
+     0.235,
+     -0.0923
+    ],
+    "eyeR": [
+     -0.0256,
+     0.235,
+     0.1323
+    ],
+    "mouth": [
+     0.0952,
+     0.4,
+     -0.0307
+    ],
+    "mouthDir": [
+     0.3144,
+     0.9439,
+     -0.1015
+    ]
+   }
+  ],
+  "roar": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "run": {
+   "contact": null,
+   "len": 583,
+   "loop": true,
+   "speed": 6.48
+  },
+  "walk": {
+   "contact": null,
+   "len": 587,
+   "loop": true,
+   "speed": 3.6
+  }
+ },
+ "boss-medusa": {
+  "attack": {
+   "contact": 620,
+   "len": 820,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1300,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1150,
+   "len": 1400,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 380,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "roar": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "run": {
+   "contact": null,
+   "len": 677,
+   "loop": true,
+   "speed": 5.760000000000001
+  },
+  "walk": {
+   "contact": null,
+   "len": 906,
+   "loop": true,
+   "speed": 3.2
+  }
+ },
+ "boss-minotaur": {
+  "attack": {
+   "contact": 600,
+   "len": 850,
+   "loop": false
+  },
+  "charge": {
+   "contact": 900,
+   "dash": 500,
+   "len": 1820,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1700,
+   "loop": false
+  },
+  "exhale": {
+   "contact": null,
+   "len": 1000,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1200,
+   "len": 1450,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 320,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "markers": {
+   "bone": "head",
+   "eyeL": [
+    0.2216,
+    0.2093,
+    0.3426
+   ],
+   "eyeR": [
+    -0.2216,
+    0.2093,
+    0.3426
+   ],
+   "nostrilL": [
+    0.0627,
+    0.0362,
+    0.682
+   ],
+   "nostrilR": [
+    -0.0627,
+    0.0362,
+    0.682
+   ],
+   "steamDir": [
+    0.0,
+    -0.4424,
+    0.8968
+   ]
+  },
+  "roar": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "run": {
+   "contact": null,
+   "len": 411,
+   "loop": true,
+   "speed": 5.4
+  },
+  "stunned": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 591,
+   "loop": true,
+   "speed": 3.0
+  },
+  "whirl": {
+   "contact": 1200,
+   "len": 1450,
+   "loop": false
+  }
+ },
+ "boss-polyphemus": {
+  "attack": {
+   "contact": 700,
+   "len": 950,
+   "loop": false
+  },
+  "blind": {
+   "contact": null,
+   "len": 1600,
+   "loop": false
+  },
+  "boulder": {
+   "contact": 1000,
+   "grab": 420,
+   "len": 1250,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1700,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1300,
+   "len": 1550,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 320,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "roar": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "run": {
+   "contact": null,
+   "len": 513,
+   "loop": true,
+   "speed": 4.32
+  },
+  "stomp": {
+   "contact": 1000,
+   "len": 1250,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 739,
+   "loop": true,
+   "speed": 2.4
+  }
+ },
+ "foe-automaton-t1": {
+  "attack": {
+   "contact": 700,
+   "len": 900,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1100,
+   "len": 1350,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 400,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 410,
+   "loop": true,
+   "speed": 4.680000000000001
+  },
+  "sig": {
+   "contact": 650,
+   "dash": 273,
+   "len": 1343,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 465,
+   "loop": true,
+   "speed": 2.6
+  }
+ },
+ "foe-centaur-t1": {
+  "attack": {
+   "contact": 600,
+   "len": 800,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1500,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 340,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 385,
+   "loop": true,
+   "speed": 8.28
+  },
+  "sig": {
+   "contact": 450,
+   "len": 650,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 381,
+   "loop": true,
+   "speed": 4.6
+  }
+ },
+ "foe-erinya-t1": {
+  "attack": {
+   "contact": 560,
+   "len": 760,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1300,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 380,
+   "loop": false
+  },
+  "hover": {
+   "alt": 0.75,
+   "contact": null,
+   "len": 2200,
+   "loop": true
+  },
+  "sig": {
+   "contact": 500,
+   "len": 700,
+   "loop": false
+  }
+ },
+ "foe-flock-t1": {
+  "attack": {
+   "contact": 300,
+   "len": 500,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1000,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 320,
+   "loop": false
+  },
+  "hover": {
+   "alt": 1.0,
+   "contact": null,
+   "len": 400,
+   "loop": true
+  },
+  "sig": {
+   "contact": 700,
+   "len": 900,
+   "loop": false
+  }
+ },
+ "foe-harpy-t1": {
+  "attack": {
+   "contact": 350,
+   "len": 550,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1250,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 360,
+   "loop": false
+  },
+  "hover": {
+   "alt": 1.2,
+   "contact": null,
+   "len": 1600,
+   "loop": true
+  },
+  "sig": {
+   "contact": 500,
+   "len": 700,
+   "loop": false
+  }
+ },
+ "foe-lamia-t1": {
+  "attack": {
+   "contact": 450,
+   "len": 650,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1300,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1000,
+   "len": 1250,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 380,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 382,
+   "loop": true,
+   "speed": 5.760000000000001
+  },
+  "sig": {
+   "contact": 600,
+   "len": 800,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 500,
+   "loop": true,
+   "speed": 3.2
+  }
+ },
+ "foe-satyr-t1": {
+  "attack": {
+   "contact": 450,
+   "len": 650,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 900,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 900,
+   "len": 1150,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 280,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 294,
+   "loop": true,
+   "speed": 6.12
+  },
+  "sig": {
+   "contact": 600,
+   "len": 850,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 282,
+   "loop": true,
+   "speed": 3.4
+  }
+ },
+ "foe-shade-t1": {
+  "attack": {
+   "contact": 380,
+   "len": 580,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1400,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 340,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 241,
+   "loop": true,
+   "speed": 9.72
+  },
+  "sig": {
+   "contact": 500,
+   "len": 1040,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 317,
+   "loop": true,
+   "speed": 5.4
+  }
+ },
+ "foe-skeleton-t1": {
+  "attack": {
+   "contact": 550,
+   "len": 750,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "heavy": {
+   "contact": 1000,
+   "len": 1250,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 380,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 387,
+   "loop": true,
+   "speed": 5.04
+  },
+  "sig": {
+   "contact": 500,
+   "len": 2200,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 504,
+   "loop": true,
+   "speed": 2.8
+  }
+ },
+ "hero-body": {
+  "attack": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "axe-chop": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "axe-chop-diag": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "bow-shoot": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "chain-whip": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "club-crush": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "death": {
+   "contact": null,
+   "len": 900,
+   "loop": false
+  },
+  "hit": {
+   "contact": null,
+   "len": 280,
+   "loop": false
+  },
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "run": {
+   "contact": null,
+   "len": 246,
+   "loop": true,
+   "speed": 7.5600000000000005
+  },
+  "skill-arc": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "skill-arc-blade": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "skill-arc-club": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "skill-buff": {
+   "contact": null,
+   "len": 700,
+   "loop": false
+  },
+  "skill-circle": {
+   "contact": 120,
+   "len": 370,
+   "loop": false
+  },
+  "skill-dash": {
+   "contact": 60,
+   "len": 630,
+   "loop": false
+  },
+  "skill-proj": {
+   "contact": 120,
+   "len": 370,
+   "loop": false
+  },
+  "spear-brace": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "spear-thrust": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "spear-thrust-high": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "sword-slash-heavy": {
+   "contact": 220,
+   "len": 470,
+   "loop": false
+  },
+  "sword-slash-l": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "sword-slash-r": {
+   "contact": 220,
+   "len": 420,
+   "loop": false
+  },
+  "walk": {
+   "contact": null,
+   "len": 322,
+   "loop": true,
+   "speed": 4.2
+  }
+ },
+ "npc-architect": {
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "look": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "nod": {
+   "contact": null,
+   "len": 620,
+   "loop": false
+  },
+  "talk": {
+   "contact": null,
+   "len": 2400,
+   "loop": true
+  }
+ },
+ "npc-charon": {
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "look": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "markers": {
+   "bone": "hand-l",
+   "lantern": [
+    -0.1392,
+    0.2864,
+    0.1534
+   ]
+  },
+  "nod": {
+   "contact": null,
+   "len": 620,
+   "loop": false
+  },
+  "talk": {
+   "contact": null,
+   "len": 2400,
+   "loop": true
+  }
+ },
+ "npc-keeper": {
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "look": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "markers": {
+   "bone": "hand-l",
+   "thread": [
+    0.0148,
+    0.0633,
+    0.0417
+   ]
+  },
+  "nod": {
+   "contact": null,
+   "len": 620,
+   "loop": false
+  },
+  "talk": {
+   "contact": null,
+   "len": 2400,
+   "loop": true
+  }
+ },
+ "npc-shepherd": {
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "look": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "nod": {
+   "contact": null,
+   "len": 620,
+   "loop": false
+  },
+  "talk": {
+   "contact": null,
+   "len": 2400,
+   "loop": true
+  }
+ },
+ "npc-smith": {
+  "idle": {
+   "contact": null,
+   "len": 4000,
+   "loop": true
+  },
+  "look": {
+   "contact": null,
+   "len": 1100,
+   "loop": false
+  },
+  "nod": {
+   "contact": null,
+   "len": 620,
+   "loop": false
+  },
+  "talk": {
+   "contact": null,
+   "len": 2400,
+   "loop": true
+  }
+ }
+}

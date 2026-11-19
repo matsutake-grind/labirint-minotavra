@@ -1,0 +1,149 @@
+/* Ядро HUD: DOM поверх канваса. Текст и панели — в DOM ради чёткости шрифта и доступности,
+   мир и эффекты — в канвасе. Размеры и раскладка — docs/ART_UI_BIBLE.md §8. */
+@import url('../vendor/fonts/fonts.css');
+
+:root {
+  --bronze: #C08A2E; --bronze-hi: #E3B45C; --bronze-lo: #6E5122;
+  --ink: #120C08; --pale: #EDE6D6; --crimson: #B03A2E; --crimson-hi: #E0603F;
+  --energy: #3E6E8E; --energy-hi: #6FA8C8;
+  --ui: 1;                                   /* масштаб интерфейса, ставится кодом */
+  --safe-r: 0px; --safe-b: 0px;              /* запас под sticky-баннер площадки */
+}
+#hud, #hud * { box-sizing: border-box; margin: 0; padding: 0; }
+#hud {
+  position: fixed; inset: 0; pointer-events: none; z-index: 10;
+  font-family: 'PT Sans', system-ui, sans-serif; color: var(--pale);
+  -webkit-user-select: none; user-select: none;
+  padding-right: calc(var(--safe-r) + env(safe-area-inset-right, 0px));
+  padding-bottom: calc(var(--safe-b) + env(safe-area-inset-bottom, 0px));
+}
+#hud .tap { pointer-events: auto; touch-action: none; }
+
+/* ---- сосуды HP и энергии: не орбы и не полоски — сосуд с бронзовым ободом ---- */
+.vessel { position: absolute; bottom: calc(22px * var(--ui) + var(--safe-b)); width: calc(140px * var(--ui)); height: calc(160px * var(--ui)); }
+.vessel.hp { left: calc(24px * var(--ui)); }
+.vessel.en { right: calc(24px * var(--ui) + var(--safe-r)); }
+.vessel svg { width: 100%; height: 100%; display: block; filter: drop-shadow(0 calc(2px * var(--ui)) calc(6px * var(--ui)) rgba(0,0,0,.6)); }
+.vessel .num { position: absolute; left: 0; right: 0; bottom: calc(14px * var(--ui)); text-align: center;
+  font-weight: 700; font-size: max(13px, calc(16px * var(--ui))); text-shadow: 0 1px 3px #000; letter-spacing: .02em; }
+
+/* ---- панель приёмов ---- */
+#skills { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(34px * var(--ui) + var(--safe-b)); display: flex; gap: calc(8px * var(--ui)); }
+.slot { position: relative; width: max(48px, calc(56px * var(--ui))); height: max(48px, calc(56px * var(--ui))); border-radius: calc(6px * var(--ui));
+  background: var(--glaze-2); border: calc(2px * var(--ui)) solid var(--bronze-lo);
+  box-shadow: inset 0 calc(1px * var(--ui)) 0 rgba(227,180,92,.35), 0 calc(2px * var(--ui)) calc(6px * var(--ui)) rgba(0,0,0,.55);
+  display: grid; place-items: center; }
+.slot.ready { border-color: var(--gc, var(--bronze)); }
+.slot.empty { opacity: .55; }
+/* Не хватает энергии — слот тускнеет и синеет: то же сообщение, что и сосуд EN, без строки текста. */
+.slot.poor, .arc.poor { opacity: .75; }
+.slot.poor .ico, .slot.poor svg, .arc.poor .ico, .arc.poor svg { filter: grayscale(1); }
+.slot svg { width: 72%; height: 72%; }
+/* Знак приёма (A10) — картинка, а не SVG: размер тот же, перетаскивание и выделение сняты. */
+.slot .ico { width: 72%; height: 72%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+/* Цифра клавиши — под слотом, одна на слот; в самом слоте остаются только знак и сектор отката. */
+.slot .key { position: absolute; left: 0; right: 0; top: calc(100% + 3px); text-align: center; line-height: 1; font-size: max(12px, calc(12px * var(--ui))); color: var(--bronze-hi); opacity: .9; }
+.slot .cd { position: absolute; inset: 0; border-radius: inherit; background: conic-gradient(rgba(22,17,13,.72) var(--p, 0turn), transparent 0); display: none; pointer-events: none; }
+.arc .cd { position: absolute; inset: 0; border-radius: inherit; background: conic-gradient(rgba(22,17,13,.72) var(--p, 0turn), transparent 0); display: none; pointer-events: none; }
+.slot.cooling .cd, .arc.cooling .cd { display: block; }
+/* Готовность: светлая вспышка, держится на одном кадре класса .flash и гаснет по opacity за 280 мс. */
+.slot .fl, .arc .fl { position: absolute; inset: 0; border-radius: inherit; background: rgba(255, 236, 190, .55); opacity: 0; pointer-events: none; transition: opacity .28s ease-out; }
+.slot.flash .fl, .arc.flash .fl { opacity: 1; transition: none; }
+@media (prefers-reduced-motion: reduce) { .slot .fl, .arc .fl { transition: none; } }
+
+/* ---- опыт и уровень ---- */
+#xp { position: absolute; left: 0; right: 0; bottom: var(--safe-b); height: calc(4px * var(--ui)); background: rgba(10,7,4,.75); }
+/* растёт масштабом от левого края (инвариант 5: анимация только transform и opacity; И2) */
+#xp > i { display: block; height: 100%; width: 100%; transform: scaleX(0); transform-origin: left center;
+  background: var(--clay-light); transition: transform .25s ease; }
+#lvl { position: absolute; left: calc(178px * var(--ui)); bottom: calc(26px * var(--ui) + var(--safe-b)); width: max(32px, calc(40px * var(--ui))); height: max(32px, calc(40px * var(--ui)));
+  border-radius: 50%; background: var(--glaze); border: calc(2px * var(--ui)) solid var(--bronze);
+  display: grid; place-items: center; font-family: 'Philosopher', 'PT Sans', sans-serif; font-weight: 700; font-size: max(14px, calc(18px * var(--ui))); }
+
+/* ---- верх: боссбар и полоса состояний ---- */
+#boss { position: absolute; left: 50%; transform: translateX(-50%); top: calc(2vh); width: 40%; display: none; }
+#boss.on { display: block; }
+#boss.flash .name { color: var(--bronze-hi); }   /* смена фазы (P13): имя вспыхивает золотом на PHASE_FLASH_MS */
+#boss .name { text-align: center; font-family: 'Philosopher', 'PT Sans', sans-serif; font-size: max(14px, calc(18px * var(--ui))); text-shadow: 0 1px 3px #000; }
+#boss .bar { height: calc(10px * var(--ui)); background: rgba(10,7,4,.8); border: calc(1px * var(--ui)) solid var(--bronze-lo); }
+#boss .bar > i { display: block; height: 100%; background: #C94B30; }
+/* Полоска бафов (P12): под кнопкой паузы, иконки 36 (библия §8.2). Заливка идёт снизу вверх по
+   остатку времени цветом источника; знак лежит поверх заливки. */
+#buffs { position: absolute; left: 12px; top: 66px; display: flex; gap: 6px; pointer-events: none; }
+#buffs .b { position: relative; width: 36px; height: 36px; border-radius: 4px; overflow: hidden;
+  border: 2px solid var(--bc, var(--bronze-lo)); background: #1A120B; box-shadow: 0 2px 5px rgba(0, 0, 0, .5); }
+#buffs .b svg { position: absolute; inset: 0; width: 100%; height: 100%; padding: 4px; box-sizing: border-box; }
+#buffs .b .left { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; background: var(--bc, var(--bronze-lo)); opacity: .38; }
+.slot.on, .arc.on { box-shadow: 0 0 0 3px var(--gc, var(--bronze-hi)), 0 2px 6px rgba(0, 0, 0, .5); }
+
+/* ---- пауза: слева сверху, 44 px, рядом с подписью зоны ---- */
+/* Пауза и зелье лежат в левых 40 % окна — под плавающей стик-зоной T08 (#stickzone, z-index 0, в DOM позже): без своего z-index касание уходило
+   стику, и на телефоне ни пауза, ни зелье не нажимались (soak-probe п. 6, 31.10.2026). z-index 2 — как у кнопки атаки. */
+#pause { position: absolute; left: 12px; top: 10px; width: 48px; height: 48px; border-radius: 8px; cursor: pointer; z-index: 2;
+  background: var(--glaze-2); border: 2px solid var(--bronze-lo); display: grid; place-items: center; }
+#pause svg { width: 60%; height: 60%; }
+
+/* ---- миникарта: правый верхний угол, рамка как у остального HUD (P11) ---- */
+#map { position: absolute; border: 2px solid var(--bronze-lo); border-radius: 8px; background: #120C08;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, .5), 0 0 0 1px rgba(227, 180, 92, .18) inset; }
+
+/* ---- строка состояния: под картой, только под стендом ---- */
+#info { position: absolute; right: calc(12px * var(--ui) + var(--safe-r)); top: calc(12px * var(--ui)); text-align: right;
+  font-size: max(12px, calc(13px * var(--ui))); line-height: 1.5; text-shadow: 0 1px 3px #000; opacity: .92; white-space: pre; }
+
+/* ---- мобильные контролы: стик слева, дуга приёмов справа вокруг атаки ---- */
+#touch { display: none; }
+body.touch #touch { display: block; }
+body.touch #skills { display: none; }
+/* Плавающий стик (T08): в покое не рисуется; ставится под палец в левых 40 % экрана (r3/hud.js). Зона — под кнопками и сосудами, поэтому они перехватывают касание первыми. */
+#stickzone { position: absolute; left: 0; top: 0; bottom: 0; width: 40%; pointer-events: auto; touch-action: none; z-index: 0; }
+#stick { position: absolute; left: 0; top: 0; width: 128px; height: 128px; display: none; pointer-events: none; z-index: 1;
+  border-radius: 50%; border: 2px solid rgba(192,138,46,.45); background: rgba(12,8,5,.3); }
+#stick.on { display: block; }
+#stick > i { position: absolute; left: 50%; top: 50%; width: 38%; height: 38%; margin: -19% 0 0 -19%; border-radius: 50%;
+  background: #4A3A1E; border: calc(2px * var(--ui)) solid var(--bronze); }
+#atk { position: absolute; right: calc(14px + var(--safe-r)); bottom: calc(14px + var(--safe-b)); width: 64px; height: 64px; z-index: 2;
+  border-radius: 50%; background: #4A1B13; border: 3px solid var(--bronze); display: grid; place-items: center; }
+#atk svg { width: 60%; height: 60%; }
+.arc { position: absolute; width: calc(52px * var(--ui)); height: calc(52px * var(--ui)); border-radius: 50%;
+  background: var(--glaze-2); border: calc(2px * var(--ui)) solid var(--bronze-lo); display: grid; place-items: center; }
+.arc svg { width: 64%; height: 64%; }
+.arc .ico { width: 64%; height: 64%; object-fit: contain; user-select: none; -webkit-user-drag: none; }
+.arc.empty { opacity: .55; }
+body.touch .arc.empty { display: none; }   /* T08: пустой слот на касании не рисуется, пока в нём нет приёма */
+.arc.cooling { border-color: #4A3418; filter: grayscale(.6); }
+/* Портрет телефона: кнопка удара и дуга приёмов — в том же правом нижнем углу, что и в ландшафте (T08); зелье стоит над сосудом здоровья. */
+body.touch.portrait #potion { bottom: calc(132px + var(--safe-b)); }
+#potion { position: absolute; left: 14px; bottom: calc(132px + var(--safe-b)); width: 48px; height: 48px; z-index: 2;
+  border-radius: 6px; background: var(--glaze-2); border: 2px solid var(--bronze-lo); display: grid; place-items: center; }
+#potion svg { width: 62%; height: 62%; }
+
+/* ---- телефон: размеры в dp, общий масштаб их не уменьшает; минимум касания 48, атака 64 ---- */
+body.touch .vessel { width: 96px; height: 110px; bottom: calc(10px + var(--safe-b)); }
+body.touch .vessel.hp { left: 10px; }
+/* T08: сосуд энергии встал рядом с сосудом здоровья — правый нижний угол отдан кнопке удара и дуге приёмов. */
+body.touch .vessel.en { left: 114px; right: auto; }
+body.touch .vessel .num { font-size: 13px; bottom: 8px; }
+body.touch #lvl { left: 218px; bottom: calc(12px + var(--safe-b)); width: 34px; height: 34px; font-size: 15px; }
+/* Низкое окно (телефон в ландшафте, T08): сосуды ужаты, чтобы весь HUD занимал ≤ 20 % площади; сосуд энергии встаёт вплотную к сосуду здоровья, уровень — следом. */
+@media (max-height: 420px), (max-width: 340px) { body.touch .vessel { width: 80px; height: 92px; } body.touch .vessel.en { left: 96px; } body.touch #lvl { left: 180px; } }
+body.touch #info { font-size: 12px; }
+
+/* ---- подсказка первых минут (P4): одна строка, гаснет сама; движение ≤ 400 мс, scale не растёт ---- */
+/* T01 (пакет ТЗ 22.10): полоса под названием зоны и строкой счёта врагов, по центру, не шире половины окна. Верх ставит r3/hud.js (верхПодсказки) от нижней кромки
+   этих плашек: прежние места (треть высоты, левый край на касании) ложились на стик, дугу приёмов и героя. */
+#hint { position: absolute; left: 50%; transform: translate(-50%, 6px); top: 60px;
+  max-width: 50%; width: max-content; padding: calc(4px * var(--ui)) calc(10px * var(--ui)); border-radius: 8px; text-align: center;
+  /* пол кегля — 12 px (библия §8): на 1280×800 масштаб 0.75 давал 10.5 px */
+  font-size: max(12px, calc(14px * var(--ui))); line-height: 1.3; color: var(--pale); background: rgba(12, 8, 5, .82);
+  border: 1px solid var(--bronze-lo); box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+  opacity: 0; pointer-events: none; transition: opacity .28s ease, transform .28s ease; }
+#hint.on { opacity: 1; transform: translate(-50%, 0); }
+@media (prefers-reduced-motion: reduce) { #hint { transition: none; } }
+/* Счёт врагов под названием зоны (T01): та же рамка, что у названия, но мельче; верх ставит r3/hud.js. */
+#foes { position: fixed; left: 70px; top: 54px; padding: 2px 10px; border-radius: 6px; font-size: max(12px, calc(13px * var(--ui, 1))); line-height: 1.3; color: var(--pale);
+  background: rgba(22, 17, 13, .88); border: 1px solid var(--line); pointer-events: none; z-index: 2; }
+#foes:empty { display: none; }
+body.boss-on #foes { display: none; }
+/* Полоска бафов заняла ряд под паузой (P12): в портрете подсказка уходит под этот ряд, в ландшафте
+   — правее него (до четырёх плашек по 36 с зазорами). Ширину в обоих случаях считает r3/hud.js. */
